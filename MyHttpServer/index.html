@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Icons/icon.icn">
+    <title>engine</title>
+    <style>*{
+        box-sizing: border-box;
+    }
+    :root {
+        --bg-body: #080b12;
+        --bg-search: #101722;
+        --border-search: #263343;
+        --shadow-search: rgba(0, 0, 0, 0.4);
+        --accent: #00e5ff;
+        --accent-shadow: rgba(0, 229, 255, 0.15);
+        --bg-icon: #16202d;
+        --icon-color: #00e5ff;
+        --icon-active-bg: #00e5ff;
+        --icon-active-color: #081018;
+        --text-color: #ffffff;
+        --placeholder-color: #687588;
+        --weather-city-color: #687588;
+
+        --tile-bg: rgba(255, 255, 255, 0.05);
+        --tile-border: rgba(255, 255, 255, 0.08);
+        --tile-hover-bg: rgba(255, 255, 255, 0.12);
+        --tile-hover-border: rgba(255, 255, 255, 0.25);
+        --social-icon: #9ab2c9;
+        --social-icon-hover: #ffffff;
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --bg-body: #f0f4f9;
+            --bg-search: #d7dcde;
+            --border-search: #d7e0ea;
+            --shadow-search: rgba(0, 40, 80, 0.08);
+            --accent: #0088ff;
+            --accent-shadow: rgba(0, 136, 255, 0.2);
+            --bg-icon: #edf2f8;
+            --icon-color: #687588;
+            --icon-active-bg: #0088ff;
+            --icon-active-color: #ffffff;
+            --text-color: #1a2332;
+            --placeholder-color: #8c9ba5;
+            --weather-city-color: blue;
+
+
+            --tile-bg: rgba(0, 0, 0, 0.04);
+            --tile-border: rgba(0, 0, 0, 0.08);
+            --tile-hover-bg: rgba(0, 0, 0, 0.08);
+            --tile-hover-border: rgba(0, 0, 0, 0.18);
+            --social-icon: #00000;
+            --social-icon-hover: #0088ff;
+        }
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        position: relative;
+        background: var(--bg-body);
+        font-family: 'Inter', Arial, sans-serif;
+        transition: background 0.4s ease;
+    }
+
+    .app-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .weather {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .weather__temp {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--text-color);
+        line-height: 1;
+        transition: color 0.4s ease;
+    }
+
+    .weather__city {
+        font-size: 14px;
+        color: var(--weather-city-color);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: color 0.4s ease;
+    }
+
+    .greeting {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .greeting__time {
+        font-size: 56px;
+        font-weight: 700;
+        color: var(--text-color);
+        line-height: 1;
+        letter-spacing: 1px;
+        transition: color 0.4s ease;
+    }
+
+    .greeting__text {
+        font-size: 16px;
+        color: var(--accent);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: color 0.4s ease;
+    }
+
+    .search {
+        position: relative;
+        width: 100%;
+        max-width: 686px;
+        min-width: 220px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        background: var(--bg-search);
+        border: 1px solid var(--border-search);
+        border-radius: 22px;
+        box-shadow: 0 15px 40px var(--shadow-search);
+        overflow: hidden;
+        transition: 0.4s ease;
+    }
+
+    .search:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 0 20px var(--accent-shadow),
+        0 15px 40px var(--shadow-search);
+        transform: translateY(-3px);
+    }
+
+    .search__icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 14px;
+        background: var(--bg-search);
+        color: var(--icon-color);
+        flex-shrink: 0;
+        transition: 0.4s ease;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .search__icon svg {
+        width: 23px;
+        height: 23px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        transition: 0.4s ease;
+    }
+
+    .search:focus-within .search__icon {
+        background: var(--icon-active-bg);
+        color: var(--icon-active-color);
+    }
+
+    .search:focus-within .search__icon svg {
+        filter: none;
+        transform: scale(1.1);
+    }
+
+    .search__input {
+        flex: 1;
+        height: 100%;
+        padding: 0 18px;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: var(--text-color);
+        font-size: 16px;
+        font-family: inherit;
+    }
+
+    .search__input::placeholder {
+        color: var(--placeholder-color);
+    }
+
+    .search__input::-webkit-search-cancel-button {
+        display: none;
+    }
+
+    .search__scan {
+        position: absolute;
+        left: 60px;
+        bottom: 0;
+        width: 70px;
+        height: 2px;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent),
+        0 0 20px var(--accent);
+        opacity: 0;
+        animation: scan 2.5s linear infinite;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+    }
+
+    .search:focus-within .search__scan {
+        opacity: 1;
+    }
+
+    @keyframes scan {
+        0% { transform: translateX(-10px); }
+        100% { transform: translateX(560px); }
+    }
+
+    .social-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        padding: 8px;
+    }
+
+    .social-btn {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        text-decoration: none;
+        background: var(--tile-bg);
+        border: 1px solid var(--tile-border);
+        transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .social-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: var(--social-icon);
+        transition: fill 0.2s ease;
+    }
+
+    .social-btn img {
+        width: 24px;
+        height: 24px;
+        fill: red;
+        transition: fill 0.2s ease;
+    }
+
+    .social-btn:hover {
+        background: var(--tile-hover-bg);
+        border-color: var(--tile-hover-border);
+        transform: translateY(-3px);
+    }
+
+    .social-btn:active {
+        transform: translateY(-1px) scale(0.97);
+    }
+
+    @media (max-width: 500px) {
+        .weather {
+            top: 20px;
+            right: 20px;
+        }
+    }
+    .monkey.screamer{
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+    }
+
+    #monkey{
+        display: none;
+    }
+    #monkey:target{
+        display: block;
+    }</style>
+</head>
+<body>
+
+<div class="weather">
+    <div class="weather__temp">23&deg;</div>
+    <div class="weather__city">Amsterdam</div>
+</div>
+
+<div class="app-container">
+    <div class="greeting">
+        <div class="greeting__time">09:11:01</div>
+        <div class="greeting__text">what's up my boy?</div>
+    </div>
+
+    <form action="https://google.com/search" method="get" target="_blank" class="search">
+        <button type="submit" class="search__icon" title="Найти">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </button>
+        <input type="search" name="q" class="search__input" placeholder="Search..." required>
+        <div class="search__scan"></div>
+    </form>
+
+    <div class="social-wrapper">
+        <a href="#" class="social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+        <a href="#" class="social-btn" aria-label="X"><svg viewBox="0 0 24 24"><<path d="M9.205 8.658v-2.26c0-.19.072-.333.238-.428l4.543-2.616c.619-.357 1.356-.523 2.117-.523 2.854 0 4.662 2.212 4.662 4.566 0 .167 0 .357-.024.547l-4.71-2.759a.797.797 0 00-.856 0l-5.97 3.473zm10.609 8.8V12.06c0-.333-.143-.57-.429-.737l-5.97-3.473 1.95-1.118a.433.433 0 01.476 0l4.543 2.617c1.309.76 2.189 2.378 2.189 3.948 0 1.808-1.07 3.473-2.76 4.163zM7.802 12.703l-1.95-1.142c-.167-.095-.239-.238-.239-.428V5.899c0-2.545 1.95-4.472 4.591-4.472 1 0 1.927.333 2.712.928L8.23 5.067c-.285.166-.428.404-.428.737v6.898zM12 15.128l-2.795-1.57v-3.33L12 8.658l2.795 1.57v3.33L12 15.128zm1.796 7.23c-1 0-1.927-.332-2.712-.927l4.686-2.712c.285-.166.428-.404.428-.737v-6.898l1.974 1.142c.167.095.238.238.238.428v5.233c0 2.545-1.974 4.472-4.614 4.472zm-5.637-5.303l-4.544-2.617c-1.308-.761-2.188-2.378-2.188-3.948A4.482 4.482 0 014.21 6.327v5.423c0 .333.143.571.428.738l5.947 3.449-1.95 1.118a.432.432 0 01-.476 0zm-.262 3.9c-2.688 0-4.662-2.021-4.662-4.519 0-.19.024-.38.047-.57l4.686 2.71c.286.167.571.167.856 0l5.97-3.448v2.26c0 .19-.07.333-.237.428l-4.543 2.616c-.619.357-1.356.523-2.117.523zm5.899 2.83a5.947 5.947 0 005.827-4.756C22.287 18.339 24 15.84 24 13.296c0-1.665-.713-3.282-1.998-4.448.119-.5.19-.999.19-1.498 0-3.401-2.759-5.947-5.946-5.947-.642 0-1.26.095-1.88.31A5.962 5.962 0 0010.205 0a5.947 5.947 0 00-5.827 4.757C1.713 5.447 0 7.945 0 10.49c0 1.666.713 3.283 1.998 4.448-.119.5-.19 1-.19 1.499 0 3.401 2.759 5.946 5.946 5.946.642 0 1.26-.095 1.88-.309a5.96 5.96 0 004.162 1.713z"/></svg></a>
+        <a href="https://www.youtube.com/" target="_blank" class="social-btn" aria-label="youtube">
+            <svg width="800px" height="800px" viewBox="0 -7 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Color-" transform="translate(-200.000000, -368.000000)" fill="#CE1312">
+                        <path d="M219.044,391.269916 L219.0425,377.687742 L232.0115,384.502244 L219.044,391.269916 Z M247.52,375.334163 C247.52,375.334163 247.0505,372.003199 245.612,370.536366 C243.7865,368.610299 241.7405,368.601235 240.803,368.489448 C234.086,368 224.0105,368 224.0105,368 L223.9895,368 C223.9895,368 213.914,368 207.197,368.489448 C206.258,368.601235 204.2135,368.610299 202.3865,370.536366 C200.948,372.003199 200.48,375.334163 200.48,375.334163 C200.48,375.334163 200,379.246723 200,383.157773 L200,386.82561 C200,390.73817 200.48,394.64922 200.48,394.64922 C200.48,394.64922 200.948,397.980184 202.3865,399.447016 C204.2135,401.373084 206.612,401.312658 207.68,401.513574 C211.52,401.885191 224,402 224,402 C224,402 234.086,401.984894 240.803,401.495446 C241.7405,401.382148 243.7865,401.373084 245.612,399.447016 C247.0505,397.980184 247.52,394.64922 247.52,394.64922 C247.52,394.64922 248,390.73817 248,386.82561 L248,383.157773 C248,379.246723 247.52,375.334163 247.52,375.334163 L247.52,375.334163 Z" id="Youtube">
+
+                        </path>
+                    </g>
+                </g>
+            </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="tg">
+            <svg width="800px" height="800px" viewBox="0 0 240 240" id="svg2" xmlns="http://www.w3.org/2000/svg"><style>.st0{fill:url(#path2995-1-0_1_)}.st1{fill:#c8daea}.st2{fill:#a9c9dd}.st3{fill:url(#path2991_1_)}</style><linearGradient id="path2995-1-0_1_" gradientUnits="userSpaceOnUse" x1="-683.305" y1="534.845" x2="-693.305" y2="511.512" gradientTransform="matrix(6 0 0 -6 4255 3247)"><stop offset="0" stop-color="#37aee2"/><stop offset="1" stop-color="#1e96c8"/></linearGradient><path id="path2995-1-0" class="st0" d="M240 120c0 66.3-53.7 120-120 120S0 186.3 0 120 53.7 0 120 0s120 53.7 120 120z"/><path id="path2993" class="st1" d="M98 175c-3.9 0-3.2-1.5-4.6-5.2L82 132.2 152.8 88l8.3 2.2-6.9 18.8L98 175z"/><path id="path2989" class="st2" d="M98 175c3 0 4.3-1.4 6-3 2.6-2.5 36-35 36-35l-20.5-5-19 12-2.5 30v1z"/><linearGradient id="path2991_1_" gradientUnits="userSpaceOnUse" x1="128.991" y1="118.245" x2="153.991" y2="78.245" gradientTransform="matrix(1 0 0 -1 0 242)"><stop offset="0" stop-color="#eff7fc"/><stop offset="1" stop-color="#ffffff"/></linearGradient><path id="path2991" class="st3" d="M100 144.4l48.4 35.7c5.5 3 9.5 1.5 10.9-5.1L179 82.2c2-8.1-3.1-11.7-8.4-9.3L55 117.5c-7.9 3.2-7.8 7.6-1.4 9.5l29.7 9.3L152 93c3.2-2 6.2-.9 3.8 1.3L100 144.4z"/></svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="X">
+            <svg height="1em" style="flex:none;line-height:1" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><title>DeepSeek</title><path d="M23.748 4.482c-.254-.124-.364.113-.512.234-.051.039-.094.09-.137.136-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.156-.708-.311-.955-.65-.172-.241-.219-.51-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.093.172.187.129.323-.082.28-.18.552-.266.833-.055.179-.137.217-.329.14a5.526 5.526 0 01-1.736-1.18c-.857-.828-1.631-1.742-2.597-2.458a11.365 11.365 0 00-.689-.471c-.985-.957.13-1.743.388-1.836.27-.098.093-.432-.779-.428-.872.004-1.67.295-2.687.684a3.055 3.055 0 01-.465.137 9.597 9.597 0 00-2.883-.102c-1.885.21-3.39 1.102-4.497 2.623C.082 8.606-.231 10.684.152 12.85c.403 2.284 1.569 4.175 3.36 5.653 1.858 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.133-.284 4.994-1.86.47.234.962.327 1.78.397.63.059 1.236-.03 1.705-.128.735-.156.684-.837.419-.961-2.155-1.004-1.682-.595-2.113-.926 1.096-1.296 2.746-2.642 3.392-7.003.05-.347.007-.565 0-.845-.004-.17.035-.237.23-.256a4.173 4.173 0 001.545-.475c1.396-.763 1.96-2.015 2.093-3.517.02-.23-.004-.467-.247-.588zM11.581 18c-2.089-1.642-3.102-2.183-3.52-2.16-.392.024-.321.471-.235.763.09.288.207.486.371.739.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.167-1.361-.802-2.5-1.86-3.301-3.307-.774-1.393-1.224-2.887-1.298-4.482-.02-.386.093-.522.477-.592a4.696 4.696 0 011.529-.039c2.132.312 3.946 1.265 5.468 2.774.868.86 1.525 1.887 2.202 2.891.72 1.066 1.494 2.082 2.48 2.914.348.292.625.514.891.677-.802.09-2.14.11-3.054-.614zm1-6.44a.306.306 0 01.415-.287.302.302 0 01.2.288.306.306 0 01-.31.307.303.303 0 01-.304-.308zm3.11 1.596c-.2.081-.399.151-.59.16a1.245 1.245 0 01-.798-.254c-.274-.23-.47-.358-.552-.758a1.73 1.73 0 01.016-.588c.07-.327-.008-.537-.239-.727-.187-.156-.426-.199-.688-.199a.559.559 0 01-.254-.078c-.11-.054-.2-.19-.114-.358.028-.054.16-.186.192-.21.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.391.451.462.576.685.914.176.265.336.537.445.848.067.195-.019.354-.25.452z" fill="#4D6BFE"></path></svg>
+        </a>
+        <a href="#monkey" class="social-btn" id="screamer-trigger" aria-label="inst">
+            <svg width="800px" height="800px" viewBox="0 0 3364.7 3364.7" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="0" cx="217.76" cy="3290.99" r="4271.92" gradientUnits="userSpaceOnUse"><stop offset=".09" stop-color="#fa8f21"/><stop offset=".78" stop-color="#d82d7e"/></radialGradient><radialGradient id="1" cx="2330.61" cy="3182.95" r="3759.33" gradientUnits="userSpaceOnUse"><stop offset=".64" stop-color="#8c3aaa" stop-opacity="0"/><stop offset="1" stop-color="#8c3aaa"/></radialGradient></defs><path d="M853.2,3352.8c-200.1-9.1-308.8-42.4-381.1-70.6-95.8-37.3-164.1-81.7-236-153.5S119.7,2988.6,82.6,2892.8c-28.2-72.3-61.5-181-70.6-381.1C2,2295.4,0,2230.5,0,1682.5s2.2-612.8,11.9-829.3C21,653.1,54.5,544.6,82.5,472.1,119.8,376.3,164.3,308,236,236c71.8-71.8,140.1-116.4,236-153.5C544.3,54.3,653,21,853.1,11.9,1069.5,2,1134.5,0,1682.3,0c548,0,612.8,2.2,829.3,11.9,200.1,9.1,308.6,42.6,381.1,70.6,95.8,37.1,164.1,81.7,236,153.5s116.2,140.2,153.5,236c28.2,72.3,61.5,181,70.6,381.1,9.9,216.5,11.9,281.3,11.9,829.3,0,547.8-2,612.8-11.9,829.3-9.1,200.1-42.6,308.8-70.6,381.1-37.3,95.8-81.7,164.1-153.5,235.9s-140.2,116.2-236,153.5c-72.3,28.2-181,61.5-381.1,70.6-216.3,9.9-281.3,11.9-829.3,11.9-547.8,0-612.8-1.9-829.1-11.9" fill="url(#0)"/><path d="M853.2,3352.8c-200.1-9.1-308.8-42.4-381.1-70.6-95.8-37.3-164.1-81.7-236-153.5S119.7,2988.6,82.6,2892.8c-28.2-72.3-61.5-181-70.6-381.1C2,2295.4,0,2230.5,0,1682.5s2.2-612.8,11.9-829.3C21,653.1,54.5,544.6,82.5,472.1,119.8,376.3,164.3,308,236,236c71.8-71.8,140.1-116.4,236-153.5C544.3,54.3,653,21,853.1,11.9,1069.5,2,1134.5,0,1682.3,0c548,0,612.8,2.2,829.3,11.9,200.1,9.1,308.6,42.6,381.1,70.6,95.8,37.1,164.1,81.7,236,153.5s116.2,140.2,153.5,236c28.2,72.3,61.5,181,70.6,381.1,9.9,216.5,11.9,281.3,11.9,829.3,0,547.8-2,612.8-11.9,829.3-9.1,200.1-42.6,308.8-70.6,381.1-37.3,95.8-81.7,164.1-153.5,235.9s-140.2,116.2-236,153.5c-72.3,28.2-181,61.5-381.1,70.6-216.3,9.9-281.3,11.9-829.3,11.9-547.8,0-612.8-1.9-829.1-11.9" fill="url(#1)"/><path d="M1269.25,1689.52c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7-416.6-186.59-416.6-416.7m-225.26,0c0,354.5,287.36,641.86,641.86,641.86s641.86-287.36,641.86-641.86-287.36-641.86-641.86-641.86S1044,1335,1044,1689.52m1159.13-667.31a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M1180.85,2707c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27S2059.13,666,2191,672c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M1170.5,447.09c-133.07,6.06-224,27.16-303.41,58.06-82.19,31.91-151.86,74.72-221.43,144.18S533.39,788.47,501.48,870.76c-30.9,79.46-52,170.34-58.06,303.41-6.16,133.28-7.57,175.89-7.57,515.35s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43s139.14,112.18,221.43,144.18c79.56,30.9,170.34,52,303.41,58.06,133.35,6.06,175.89,7.57,515.35,7.57s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2586.8,537.06,2504.71,505.15c-79.56-30.9-170.44-52.1-303.41-58.06C2068,441,2025.41,439.52,1686,439.52s-382.1,1.41-515.45,7.57" fill="#ffffff"/></svg>        </a>
+        <a href="#" class="social-btn" aria-label="linkedin">
+            <svg width="800px" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#0A66C2" d="M12.225 12.225h-1.778V9.44c0-.664-.012-1.519-.925-1.519-.926 0-1.068.724-1.068 1.47v2.834H6.676V6.498h1.707v.783h.024c.348-.594.996-.95 1.684-.925 1.802 0 2.135 1.185 2.135 2.728l-.001 3.14zM4.67 5.715a1.037 1.037 0 01-1.032-1.031c0-.566.466-1.032 1.032-1.032.566 0 1.031.466 1.032 1.032 0 .566-.466 1.032-1.032 1.032zm.889 6.51h-1.78V6.498h1.78v5.727zM13.11 2H2.885A.88.88 0 002 2.866v10.268a.88.88 0 00.885.866h10.226a.882.882 0 00.889-.866V2.865a.88.88 0 00-.889-.864z"/></svg>        </a>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
+           target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="plus">
+            <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <g id="SVGRepo_iconCarrier"> <path d="M5 12H19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12 5L12 19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
+
+            </svg></a>
+        <img class="monkey screamer" id="monkey" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf-Re8s3GLmFtvhj-WFQaZdBimr8uDeFyOfVV5Gln0uPYeHigk2CGsi0M&s=10" alt="monkey">
+    </div>
+</div>
+<script>
+    const searchForm = document.querySelector('.search');
+    const searchInput = searchForm.querySelector('.search__input');
+
+    searchForm.addEventListener('submit', () => {
+        setTimeout(() => {
+            searchInput.value = '';
+            searchInput.blur();
+        }, 10);
+    });
+</script>
+</body>
+</html>
