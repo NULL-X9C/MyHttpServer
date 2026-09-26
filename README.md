@@ -1,2 +1,1 @@
-# TireShop
-Шиномонтажка | ORIS homeworks
+# ORIS homeworks
