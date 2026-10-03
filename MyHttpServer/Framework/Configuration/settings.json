@@ -3,6 +3,6 @@
   {
     "Host": "127.0.0.1",
     "Port": "1488",
-    "Path": "connection/"
+    "Path": "connection/test/index.html/"
   }
 }

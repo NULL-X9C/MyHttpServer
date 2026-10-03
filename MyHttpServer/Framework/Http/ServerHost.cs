@@ -1,4 +1,4 @@
-namespace MyHttpServer;
+namespace MyHttpServer.Framework.Http;
 
 public class ServerHost(HttpServer server)
 {
