@@ -1,30 +1,30 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using MyHttpServer.Framework.Abstraction;
+
 namespace MyHttpServer.Framework.Configuration;
 
-public class Settings
+public class Settings : AbstractSettings<Server>
 {
     [JsonConstructor]
     private Settings()
     {
         
     }
-    public Server Server { get; set; } = new Server();
-    
+
+    public override Server Server { get; set; } = new Server();
+
     public static class SingleSettings
     {
         private static readonly Lazy<Settings?> Instance = new(() => SetSettings(@"Framework/Configuration/settings.json"));
 
         public static Settings? Current => Instance.Value;
         
-        public static string Read(string path) => File.ReadAllText(path);
-
         public static Settings? SetSettings(string jsonPath)
         {
-            var json =  Read(jsonPath);
-            return JsonSerializer.Deserialize<Settings>(json,
-                new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+            var json =  DefauilRead(jsonPath);
+            return JsonSerializer.Deserialize<Settings>(json, DefaulJsonSerializerOptions);
         }
 
     }
