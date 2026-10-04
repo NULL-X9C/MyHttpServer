@@ -44,6 +44,9 @@
       <None Update="static\knowledge-netlify\style.css">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="HomeWork_3\static\LoginForm\login.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
