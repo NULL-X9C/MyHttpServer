@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using MyHttpServer.Framework.Abstraction;
 using MyHttpServer.Framework.Configuration;
+using MyHttpServer.Framework.Handlers;
 using MyHttpServer.Framework.Http.Loging;
 using MyHttpServer.Framework.Routing;
 
@@ -11,13 +12,13 @@ public class HttpServer
 {
     private readonly HttpListener _server = new HttpListener();
     private readonly AbstractSettings<Server> _settings;
-    private readonly IFileHandler _fileHandler;
+    private readonly BaseHandler _handler;
 
 
-    public HttpServer(AbstractSettings<Server> settings, IFileHandler fileHandler)
+    public HttpServer(AbstractSettings<Server> settings, BaseHandler handler)
     {
         _settings = settings;
-        _fileHandler = fileHandler;
+        _handler = handler;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -26,7 +27,7 @@ public class HttpServer
         {
             // установка адресов прослушки
             {
-                Console.WriteLine($"pefix: http://{_settings.Server.Host}:{_settings.Server.Port}/HomeWork_3/");
+                Console.WriteLine($"pefix: http://{_settings.Server.Host}:{_settings.Server.Port}/static/");
                 var prefix = $"http://{_settings.Server.Host}:{_settings.Server.Port}/";
                 _server.Prefixes.Add(prefix);
             }
@@ -44,7 +45,7 @@ public class HttpServer
                     var context = await _server.GetContextAsync();
                     Console.WriteLine("Пришел запрос");
                     HttpLoger.LogRequestInfo(context);
-                    Task.Run(() => _fileHandler.ExecuteRequestAsync(context));
+                    Task.Run(() => _handler.HandleAsync(context));
                 }
                 catch (HttpListenerException) when (cancellationToken.IsCancellationRequested)
                 {
