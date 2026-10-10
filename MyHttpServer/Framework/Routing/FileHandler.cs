@@ -15,6 +15,12 @@ public class FileHandler(string staticFolder, MimeTypeResolver mimeTypeResolver)
             var filePath = Path.GetFullPath(Path.Combine(staticFolder, path.TrimStart('/')));
 
             Console.WriteLine(filePath);
+            
+            if (path.TrimStart('/') == "login")
+            {
+                filePath = Path.GetFullPath(Path.Combine(staticFolder, "LoginForm/login.html"));
+                Console.WriteLine("filePath is " + filePath);
+            }
 
             if (!filePath.StartsWith(staticFolder + Path.DirectorySeparatorChar))
             {
@@ -72,6 +78,7 @@ public class FileHandler(string staticFolder, MimeTypeResolver mimeTypeResolver)
             await output.WriteAsync(buffer);
             await output.FlushAsync();
             Console.WriteLine("Запрос обработан введите exit для остановки");
+            
         }
         catch (Exception e)
         {

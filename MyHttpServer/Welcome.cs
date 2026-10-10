@@ -1,4 +1,5 @@
 using MyHttpServer.Framework.Configuration;
+using MyHttpServer.Framework.Handlers;
 using MyHttpServer.Framework.Http;
 using MyHttpServer.Framework.Routing;
 
@@ -12,20 +13,29 @@ public class Welcome
         {
             Console.WriteLine("Напишите start для запуска сервера, exit - для выхода из программы ");
             var userCommand = Console.ReadLine();
-            if (userCommand?.Trim().ToLower() == "exit")
+            if (userCommand?.ToLower() == "exit")
             {
                 break;
             }
 
             if (userCommand?.Trim().ToLower() == "start")
             {
-                var root = Directory.GetCurrentDirectory() + @"\HomeWork_3\static";
+                var root = Path.Combine(Directory.GetCurrentDirectory(), "static");
                 var settings = Settings.SingleSettings.Current;
                 var mimeResolver = new MimeTypeResolver();
-                var server = new HttpServer(settings ?? throw new InvalidOperationException("Settings is null((("),
-                    new FileHandler(root, mimeResolver));
-                var serverHost = new ServerHost(server);
 
+                var exceptionHandler = new ExceptionHandler();
+                var staticHandler = new StaticFilesHandler(root, mimeResolver);
+                var controllersHandler = new ControllersHandler();
+                var notFoundHandler = new NotFoundHandler(root);
+
+                exceptionHandler
+                    .SetNext(staticHandler)
+                    .SetNext(controllersHandler)
+                    .SetNext(notFoundHandler);
+
+                var server = new HttpServer(settings, exceptionHandler);
+                var serverHost = new ServerHost(server);
                 await serverHost.StartHostAsync();
             }
         }
