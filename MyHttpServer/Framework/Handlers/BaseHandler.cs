@@ -35,6 +35,16 @@ public abstract class BaseHandler
     public async Task SendTextAsync(string text, HttpListenerResponse response)
     {
         byte[] buffer = System.Text.Encoding.UTF8.GetBytes(text);
+        response.ContentType = "text/html; charset=utf-8";
+        response.ContentLength64 = buffer.Length;
+        await using Stream output = response.OutputStream;
+        await output.WriteAsync(buffer);
+        await output.FlushAsync();
+    }
+
+    public async Task SendBytesAsync(byte[] buffer, string mimeType, HttpListenerResponse response)
+    {
+        response.ContentType = mimeType;
         response.ContentLength64 = buffer.Length;
         await using Stream output = response.OutputStream;
         await output.WriteAsync(buffer);

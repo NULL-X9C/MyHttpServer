@@ -1,6 +1,6 @@
 using MyHttpServer.Framework.Attributes;
 
-namespace MyHttpServer.Controllers;
+namespace MyHttpServer.Framework.Controllers;
 
 [Controller("auth")]
 public class AuthController
@@ -8,8 +8,10 @@ public class AuthController
     [Get("login")]
     public string GetLoginPage()
     {
-        string viewsPath = Path.Combine(Directory.GetCurrentDirectory(), "views");
-        string htmlPath = Path.Combine(viewsPath, "login.html");
+        string viewsPath = Path.Combine(Directory.GetCurrentDirectory(), @"Homework_4\views");
+        Console.WriteLine(viewsPath);
+        string htmlPath = Path.Combine(viewsPath, "index.html");
+        Console.WriteLine(htmlPath);
         
         return File.Exists(htmlPath) 
             ? File.ReadAllText(htmlPath) 
@@ -28,6 +30,7 @@ public class AuthController
 
         string checkStatus = check ? "y" : "n";
 
-        return $"<h1>OK!</h1><p>u sign in as  {email}. remember u {checkStatus}</p>";
+        return $"<h1>OK!</h1>" +
+               $"<p>u sign in as  {email}. remember u {checkStatus}</p>";
     }
 }
