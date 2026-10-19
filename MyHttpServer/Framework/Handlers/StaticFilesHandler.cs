@@ -13,6 +13,8 @@ public class StaticFilesHandler(string staticFolder, MimeTypeResolver mimeTypeRe
             var response = context.Response;
             var path = request.Url!.LocalPath;
             var filePath = Path.GetFullPath(Path.Combine(staticFolder, path.TrimStart('/')));
+            Console.WriteLine(staticFolder);
+            Console.WriteLine(filePath);
             
             Console.WriteLine(filePath);
 
@@ -47,17 +49,13 @@ public class StaticFilesHandler(string staticFolder, MimeTypeResolver mimeTypeRe
             if (File.Exists(filePath))
             {
                 await SendResponseAsync(filePath, response);
+                response.Close();
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             context.Response.StatusCode = 500;
-        }
-        finally
-        {
-            //исправить чтобы при передаче не вызывал 
-            context.Response.Close();
         }
     }
 }
