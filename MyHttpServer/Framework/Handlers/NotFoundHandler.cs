@@ -11,5 +11,6 @@ public class NotFoundHandler(string staticFolder) : BaseHandler
 
         var filePath = Path.Combine(staticFolder, "404.html");
         await SendResponseAsync(filePath, response);
+        response.Close();
     }
 }
