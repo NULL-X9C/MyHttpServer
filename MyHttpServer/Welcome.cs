@@ -20,14 +20,17 @@ public class Welcome
 
             if (userCommand?.Trim().ToLower() == "start")
             {
-                var root = Path.Combine(Directory.GetCurrentDirectory(), "static");
+                var staticFolder = Path.Combine(Directory.GetCurrentDirectory(), "HomeWork_4\\static");
+                Console.WriteLine(staticFolder);
+                Console.WriteLine(Directory.GetCurrentDirectory());
+                
                 var settings = Settings.SingleSettings.Current;
                 var mimeResolver = new MimeTypeResolver();
 
                 var exceptionHandler = new ExceptionHandler();
-                var staticHandler = new StaticFilesHandler(root, mimeResolver);
+                var staticHandler = new StaticFilesHandler(staticFolder, mimeResolver);
                 var controllersHandler = new ControllersHandler();
-                var notFoundHandler = new NotFoundHandler(root);
+                var notFoundHandler = new NotFoundHandler(staticFolder);
 
                 exceptionHandler
                     .SetNext(staticHandler)

