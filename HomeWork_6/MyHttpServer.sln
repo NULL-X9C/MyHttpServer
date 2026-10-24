@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHttpServer", "MyHttpServer\MyHttpServer.csproj", "{A296225B-B0DA-4F5C-92E6-ABAB96B79412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniTemplateEngine", "MiniTemplateEngine\MiniTemplateEngine.csproj", "{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A296225B-B0DA-4F5C-92E6-ABAB96B79412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A296225B-B0DA-4F5C-92E6-ABAB96B79412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A296225B-B0DA-4F5C-92E6-ABAB96B79412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A296225B-B0DA-4F5C-92E6-ABAB96B79412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
