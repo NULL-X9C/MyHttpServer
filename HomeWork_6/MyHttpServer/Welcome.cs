@@ -20,7 +20,7 @@ public class Welcome
 
             if (userCommand?.Trim().ToLower() == "start")
             {
-                var staticFolder = Path.Combine(Directory.GetCurrentDirectory(), "HomeWork_4\\static");
+                var staticFolder = Path.Combine(Directory.GetCurrentDirectory(), "static");
                 Console.WriteLine(staticFolder);
                 Console.WriteLine(Directory.GetCurrentDirectory());
                 

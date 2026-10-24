@@ -30,6 +30,7 @@ public class StaticFilesHandler(string staticFolder, MimeTypeResolver mimeTypeRe
                 {
                     response.StatusCode = 301;
                     response.Headers.Add("Location", path + "/");
+                    response.Close();
                     return;
                 }
 
