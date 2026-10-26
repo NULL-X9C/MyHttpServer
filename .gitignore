@@ -398,7 +398,19 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+**/.idea/
+**/.rider/
+**/*.sln.DotSettings.user
+
+# Игнорировать все варианты EmailSettings.json во всех домашках
+**/[Ee]mail[Ss]ettings*.json
+
+# Конфигурационные файлы с паролями и настройками
+**/EmailSettings.json
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp.idea/
 .idea/**
+**/.idea/
+**/.rider/
+**/*.sln.DotSettings.user
 

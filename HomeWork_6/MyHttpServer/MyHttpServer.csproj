@@ -35,10 +35,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="HomeWork_4\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="HtmlAgilityPack" Version="1.13.0" />
       <PackageReference Include="MailKit" Version="4.18.1" />
     </ItemGroup>
