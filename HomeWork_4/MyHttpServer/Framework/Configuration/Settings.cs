@@ -23,6 +23,7 @@ public class Settings : AbstractSettings<Server>
         
         public static Settings? SetSettings(string jsonPath)
         {
+            if (!File.Exists(jsonPath)) throw new NullReferenceException("Не найден файл конфигурации ");
             var json =  DefauilRead(jsonPath);
             return JsonSerializer.Deserialize<Settings>(json, DefaulJsonSerializerOptions);
         }

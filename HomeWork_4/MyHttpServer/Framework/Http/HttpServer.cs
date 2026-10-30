@@ -26,13 +26,10 @@ public class HttpServer
         try
         {
             // установка адресов прослушки
-            {
-                Console.WriteLine($"pefix: http://{_settings.Server.Host}:{_settings.Server.Port}/static/");
-                var prefix = $"http://{_settings.Server.Host}:{_settings.Server.Port}/";
-                _server.Prefixes.Add(prefix);
-            }
 
-            Console.WriteLine(_server.Prefixes);
+            Console.WriteLine($"pefix: http://{_settings.Server.Host}:{_settings.Server.Port}/static/");
+            var prefix = $"http://{_settings.Server.Host}:{_settings.Server.Port}{_settings.Server.Path}";
+            _server.Prefixes.Add(prefix);
 
             _server.Start(); // начинаем прослушивать входящие подключения
             await using var registration = cancellationToken.Register(() => _server.Stop());

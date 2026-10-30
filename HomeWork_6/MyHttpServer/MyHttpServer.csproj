@@ -32,11 +32,21 @@
       <None Update="Framework\Configuration\Email\EmailSettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Views\login.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Views\index.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="HtmlAgilityPack" Version="1.13.0" />
       <PackageReference Include="MailKit" Version="4.18.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MiniTemplateEngine\MiniTemplateEngine.csproj" />
     </ItemGroup>
 
 </Project>

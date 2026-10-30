@@ -1,6 +1,6 @@
 namespace MiniTemplateEngine;
 
-public enum KeyWords
+public enum TokenType
 {
     Text, If, Else, EndIf, Foreach, EndFor
 }

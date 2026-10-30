@@ -24,8 +24,9 @@ public class ExceptionHandler : BaseHandler
             {
                 await SendTextAsync("<h1>500 - error</h1>", response);
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
             }
             finally
             {

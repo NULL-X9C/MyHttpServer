@@ -8,7 +8,7 @@ public class AuthController
     [Get("login")]
     public string GetLoginPage()
     {
-        string viewsPath = Path.Combine(Directory.GetCurrentDirectory(), @"Homework_4\views");
+        string viewsPath = Path.Combine(Directory.GetCurrentDirectory(), "Views");
         Console.WriteLine(viewsPath);
         string htmlPath = Path.Combine(viewsPath, "index.html");
         Console.WriteLine(htmlPath);
