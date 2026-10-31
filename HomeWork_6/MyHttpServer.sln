@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHttpServer", "MyHttpServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniTemplateEngine", "MiniTemplateEngine\MiniTemplateEngine.csproj", "{CDF2DEEA-4FD5-4D4B-8E04-4D9A9BC3A913}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpServerTest", "HttpServerTest\HttpServerTest.csproj", "{D0DB73B4-50CC-469F-B0DB-3FB7C27FB392}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpServer.Test", "HttpServer.Test\HttpServer.Test.csproj", "{D0DB73B4-50CC-469F-B0DB-3FB7C27FB392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

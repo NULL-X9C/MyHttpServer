@@ -19,7 +19,7 @@ public class MovieService
     private int _nextId = 1;
 
     private static readonly HashSet<string> AllowedGenres = new() { "drama", "comedy", "action" };
-    private static readonly HashSet<string> AllowedStatuses = new() { "planned", "watched", "pinned" };
+    private static readonly HashSet<string> AllowedStatuses = new() { "planned", "watched" };
 
     public void Clear()
     {

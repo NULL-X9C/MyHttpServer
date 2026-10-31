@@ -14,8 +14,9 @@ public class HtmlTemplateRenderer : IHtmlTemplateRenderer
     public record TemplateToken(TokenType Type, string Content);
 
     // Компиляция 1 раз 
-    private static readonly Regex TokenRegex =
-        new Regex(@"(\$if\s*\(.*?\)|\$else\b|\$endif\b|\$foreach\s*\(.*?\)|\$endfor\b)", RegexOptions.Compiled);
+    private static readonly Regex TokenRegex = new(
+        @"(\$if\s*\(.*?\)|\$else|\$endif|\$foreach\s*\(.*?\)|\$endfor)",
+        RegexOptions.Singleline | RegexOptions.Compiled);
 
     private static readonly Regex VariableRegex = new(@"[$]\{([^}]+)\}", RegexOptions.Compiled);
 
@@ -44,7 +45,7 @@ public class HtmlTemplateRenderer : IHtmlTemplateRenderer
         string content;
         using (var stream = new StreamReader(filePath))
         {
-             content = stream.ReadToEnd();
+            content = stream.ReadToEnd();
         }
 
         return RenderFromString(content, dataModel);
@@ -304,6 +305,7 @@ public class HtmlTemplateRenderer : IHtmlTemplateRenderer
                 }
             }
         }
+
         return result.ToString();
     }
 }
