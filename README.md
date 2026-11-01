@@ -8,3 +8,9 @@
 2.	GET /movies/details?id=1 — получить информацию о фильме.
 3.	POST /movies/create — добавить фильм с полями title и genre.
 4.	PUT /movies/update?id=1 — изменить название, жанр и статус просмотра
+
+пример запроса для PUT:
+fetch('/movies/update?id=1&title=Matrix&genre=action&status=watched',
+{ 
+    method: 'PUT' 
+});
