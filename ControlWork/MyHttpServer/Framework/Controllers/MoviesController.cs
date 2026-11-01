@@ -47,8 +47,8 @@ public class MovieService
 
             query = query.Where(m => m.Genre == genre);
         }
-
-        return (true, query.ToList());
+        // окак можно было 
+        return (true, [.. query.OrderBy(movie => movie.Status is "planned" ? 0 : 1)]);
     }
 
     public Movie? GetById(int id) => _movies.FirstOrDefault(m => m.Id == id);
@@ -121,14 +121,13 @@ public class MoviesController : ControllerBase
     [Get("details")]
     public IActionResult GetDetails(int id)
     {
-        string? rawId = Context.Request.QueryString["id"];
-        if (string.IsNullOrWhiteSpace(rawId) || !int.TryParse(rawId, out int parsedId) || parsedId <= 0)
+        if (id <= 0)
         {
             Context.Response.StatusCode = 400;
             return Html("400 Bad Request");
         }
 
-        var movie = Service.GetById(parsedId);
+        var movie = Service.GetById(id);
         if (movie == null)
         {
             Context.Response.StatusCode = 404;
@@ -141,8 +140,8 @@ public class MoviesController : ControllerBase
     [Post("create")]
     public IActionResult Create(string title, string genre)
     {
-        var (rezult, error,_ ) = Service.Create(title, genre);
-        if (!rezult)
+        var (result, error, _) = Service.Create(title, genre);
+        if (!result)
         {
             Context.Response.StatusCode = 400;
             return Html(error!);
@@ -156,14 +155,13 @@ public class MoviesController : ControllerBase
     [Put("update")]
     public IActionResult Update(int id, string title, string genre, string status)
     {
-        string? rawId = Context.Request.QueryString["id"];
-        if (string.IsNullOrWhiteSpace(rawId) || !int.TryParse(rawId, out int parsedId) || parsedId <= 0)
+        if (id <= 0)
         {
             Context.Response.StatusCode = 400;
             return Html("400 Bad Request");
         }
 
-        var (statusCode, error) = Service.Update(parsedId, title, genre, status);
+        var (statusCode, error) = Service.Update(id, title, genre, status);
         Context.Response.StatusCode = statusCode;
 
         return statusCode == 204 ? Html("") : Html(error!);

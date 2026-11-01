@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -30,7 +29,7 @@ public class ControllersHandler : BaseHandler
                     if (getAttr != null)
                     {
                         string path = getAttr.Route.StartsWith("/")
-                            ? getAttr.Route
+                            ? getAttr.Route.TrimEnd('/')
                             : $"/{controllerAttr.Name}/{getAttr.Route}".TrimEnd('/');
                         if (string.IsNullOrEmpty(path)) path = "/";
                         _routes[$"GET:{path}"] = new EndpointDefinition
@@ -41,7 +40,7 @@ public class ControllersHandler : BaseHandler
                     if (postAttr != null)
                     {
                         string path = postAttr.Route.StartsWith("/")
-                            ? postAttr.Route
+                            ? postAttr.Route.TrimEnd('/')
                             : $"/{controllerAttr.Name}/{postAttr.Route}".TrimEnd('/');
                         if (string.IsNullOrEmpty(path)) path = "/";
                         _routes[$"POST:{path}"] = new EndpointDefinition
@@ -52,7 +51,7 @@ public class ControllersHandler : BaseHandler
                     if (putAttr != null)
                     {
                         string path = putAttr.Route.StartsWith("/")
-                            ? putAttr.Route
+                            ? putAttr.Route.TrimEnd('/')
                             : $"/{controllerAttr.Name}/{putAttr.Route}".TrimEnd('/');
                         if (string.IsNullOrEmpty(path)) path = "/";
                         _routes[$"PUT:{path}"] = new EndpointDefinition
@@ -64,7 +63,6 @@ public class ControllersHandler : BaseHandler
 
         Console.WriteLine($"[System] Маршрутизатор загружен. Найдено эндпоинтов: {_routes.Count}");
     }
-
 
     public override async Task HandleAsync(HttpListenerContext context)
     {
@@ -87,6 +85,12 @@ public class ControllersHandler : BaseHandler
             var invokeArgs = await BindParametersAsync(request, endpoint.EndpointAction);
 
             var result = endpoint.EndpointAction.Invoke(controllerInstance, invokeArgs);
+
+            if (response.StatusCode == 204 || response.StatusCode == 303)
+            {
+                response.Close();
+                return;
+            }
 
             switch (result)
             {
@@ -120,11 +124,45 @@ public class ControllersHandler : BaseHandler
         {
             using var reader = new StreamReader(request.InputStream, request.ContentEncoding);
             requestBody = await reader.ReadToEndAsync();
+            string trimmedBody = requestBody.Trim();
 
-            if (request.ContentType != null && request.ContentType.Contains("application/x-www-form-urlencoded"))
+            if (!string.IsNullOrEmpty(trimmedBody))
             {
-                var bodyParams = HttpUtility.ParseQueryString(requestBody);
-                queryParams.Add(bodyParams);
+                if ((request.ContentType != null &&
+                     request.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase))
+                    || trimmedBody.StartsWith('{'))
+                {
+                    try
+                    {
+                        using var jsonDoc = JsonDocument.Parse(trimmedBody);
+                        if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object)
+                        {
+                            foreach (var prop in jsonDoc.RootElement.EnumerateObject())
+                            {
+                                // приоритет у json
+                                queryParams[prop.Name] = prop.Value.ValueKind == JsonValueKind.Null
+                                    ? null
+                                    : prop.Value.ToString();
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // если корявый json 
+                    }
+                }
+                else
+                {
+                    // x-www-form-urlencoded
+                    var bodyParams = HttpUtility.ParseQueryString(requestBody);
+                    foreach (string? key in bodyParams.AllKeys)
+                    {
+                        if (key != null)
+                        {
+                            queryParams[key] = bodyParams[key];
+                        }
+                    }
+                }
             }
         }
 
@@ -144,7 +182,8 @@ public class ControllersHandler : BaseHandler
             }
             else
             {
-                if (request.ContentType != null && request.ContentType.Contains("application/json") &&
+                if (request.ContentType != null &&
+                    request.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase) &&
                     !string.IsNullOrWhiteSpace(requestBody))
                 {
                     invokeArgs[i] = JsonSerializer.Deserialize(requestBody, paramType, new JsonSerializerOptions
