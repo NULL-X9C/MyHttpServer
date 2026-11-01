@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -30,8 +29,9 @@ public class ControllersHandler : BaseHandler
                     if (getAttr != null)
                     {
                         string path = getAttr.Route.StartsWith("/")
-                            ? getAttr.Route
-                            : $"/{controllerAttr.Name}/{getAttr.Route}";
+                            ? getAttr.Route.TrimEnd('/')
+                            : $"/{controllerAttr.Name}/{getAttr.Route}".TrimEnd('/');
+                        if (string.IsNullOrEmpty(path)) path = "/";
                         _routes[$"GET:{path}"] = new EndpointDefinition
                             { EndpointType = type, EndpointAction = method };
                     }
@@ -40,9 +40,21 @@ public class ControllersHandler : BaseHandler
                     if (postAttr != null)
                     {
                         string path = postAttr.Route.StartsWith("/")
-                            ? postAttr.Route
-                            : $"/{controllerAttr.Name}/{postAttr.Route}";
+                            ? postAttr.Route.TrimEnd('/')
+                            : $"/{controllerAttr.Name}/{postAttr.Route}".TrimEnd('/');
+                        if (string.IsNullOrEmpty(path)) path = "/";
                         _routes[$"POST:{path}"] = new EndpointDefinition
+                            { EndpointType = type, EndpointAction = method };
+                    }
+
+                    var putAttr = method.GetCustomAttribute<PutAttribute>();
+                    if (putAttr != null)
+                    {
+                        string path = putAttr.Route.StartsWith("/")
+                            ? putAttr.Route.TrimEnd('/')
+                            : $"/{controllerAttr.Name}/{putAttr.Route}".TrimEnd('/');
+                        if (string.IsNullOrEmpty(path)) path = "/";
+                        _routes[$"PUT:{path}"] = new EndpointDefinition
                             { EndpointType = type, EndpointAction = method };
                     }
                 }
@@ -74,6 +86,12 @@ public class ControllersHandler : BaseHandler
 
             var result = endpoint.EndpointAction.Invoke(controllerInstance, invokeArgs);
 
+            if (response.StatusCode == 204 || response.StatusCode == 303)
+            {
+                response.Close();
+                return;
+            }
+
             switch (result)
             {
                 case IActionResult actionResult:
@@ -102,22 +120,56 @@ public class ControllersHandler : BaseHandler
         var queryParams = HttpUtility.ParseQueryString(request.Url!.Query);
         string requestBody = string.Empty;
 
-        if (request.HttpMethod == "POST" && request.HasEntityBody)
+        if ((request.HttpMethod == "POST" || request.HttpMethod == "PUT") && request.HasEntityBody)
         {
             using var reader = new StreamReader(request.InputStream, request.ContentEncoding);
             requestBody = await reader.ReadToEndAsync();
+            string trimmedBody = requestBody.Trim();
 
-            if (request.ContentType != null && request.ContentType.Contains("application/x-www-form-urlencoded"))
+            if (!string.IsNullOrEmpty(trimmedBody))
             {
-                var bodyParams = HttpUtility.ParseQueryString(requestBody);
-                queryParams.Add(bodyParams);
+                if ((request.ContentType != null &&
+                     request.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase))
+                    || trimmedBody.StartsWith('{'))
+                {
+                    try
+                    {
+                        using var jsonDoc = JsonDocument.Parse(trimmedBody);
+                        if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object)
+                        {
+                            foreach (var prop in jsonDoc.RootElement.EnumerateObject())
+                            {
+                                // приоритет у json
+                                queryParams[prop.Name] = prop.Value.ValueKind == JsonValueKind.Null
+                                    ? null
+                                    : prop.Value.ToString();
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // если корявый json 
+                    }
+                }
+                else
+                {
+                    // x-www-form-urlencoded
+                    var bodyParams = HttpUtility.ParseQueryString(requestBody);
+                    foreach (string? key in bodyParams.AllKeys)
+                    {
+                        if (key != null)
+                        {
+                            queryParams[key] = bodyParams[key];
+                        }
+                    }
+                }
             }
         }
 
         var methodParameters = action.GetParameters();
         var invokeArgs = new object?[methodParameters.Length];
 
-       for (int i = 0; i < methodParameters.Length; i++)
+        for (int i = 0; i < methodParameters.Length; i++)
         {
             var param = methodParameters[i];
             Type paramType = param.ParameterType;
@@ -125,11 +177,14 @@ public class ControllersHandler : BaseHandler
             if (IsSimpleType(paramType))
             {
                 string? rawValue = queryParams[param.Name!];
-                invokeArgs[i] = ConvertSingleValue(rawValue, paramType, param.HasDefaultValue ? param.DefaultValue : null);
+                invokeArgs[i] =
+                    ConvertSingleValue(rawValue, paramType, param.HasDefaultValue ? param.DefaultValue : null);
             }
             else
             {
-                if (request.ContentType != null && request.ContentType.Contains("application/json") && !string.IsNullOrWhiteSpace(requestBody))
+                if (request.ContentType != null &&
+                    request.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase) &&
+                    !string.IsNullOrWhiteSpace(requestBody))
                 {
                     invokeArgs[i] = JsonSerializer.Deserialize(requestBody, paramType, new JsonSerializerOptions
                     {
@@ -150,6 +205,7 @@ public class ControllersHandler : BaseHandler
                             prop.SetValue(dtoInstance, convertedVal);
                         }
                     }
+
                     invokeArgs[i] = dtoInstance;
                 }
             }
@@ -175,6 +231,13 @@ public class ControllersHandler : BaseHandler
             return targetType == typeof(string) ? string.Empty : defaultValue;
         }
 
-        return Convert.ChangeType(rawValue, targetType);
+        try
+        {
+            return Convert.ChangeType(rawValue, targetType);
+        }
+        catch
+        {
+            return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+        }
     }
 }
