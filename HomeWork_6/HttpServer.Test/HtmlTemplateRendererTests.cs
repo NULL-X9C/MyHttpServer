@@ -20,13 +20,13 @@ public class HtmlTemplateRendererTests
         string template = "<h1>${Title}</h1><p>${Author.Name} (${Author.City})</p>";
         var model = new
         {
-            Title = "Чистый код",
-            Author = new { Name = "Роберт Мартин", City = "Чикаго" }
+            Title = "Грязный код",
+            Author = new { Name = "Фёдор Ларионов", City = "Казань" }
         };
 
         string html = _renderer.RenderFromString(template, model);
 
-        Assert.AreEqual("<h1>Чистый код</h1><p>Роберт Мартин (Чикаго)</p>", html);
+        Assert.AreEqual("<h1>Грязный код</h1><p>Грязный код (Казань)</p>", html);
     }
 
     [TestMethod]
@@ -41,17 +41,17 @@ public class HtmlTemplateRendererTests
 
         var model = new
         {
-            AppName = "Portal",
+            AppName = "Staff",
             Users = new[]
             {
-                new { Name = "Анна", IsVip = true },
-                new { Name = "Борис", IsVip = false }
+                new { Name = "Дональд", IsVip = true },
+                new { Name = "Джеффри", IsVip = false }
             }
         };
 
         string html = _renderer.RenderFromString(template, model);
 
-        Assert.AreEqual("<ul><li>[Portal] Анна: VIP</li><li>[Portal] Борис: Обычный</li></ul>", html);
+        Assert.AreEqual("<ul><li>[Portal] Дональд: VIP</li><li>[Portal] Джеффри: Обычный</li></ul>", html);
     }
 
     [TestMethod]
