@@ -1,0 +1,406 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+body, html {
+    height: 100%;
+    min-height: 100%;
+    background-color: #000000;
+    color: #4d4d4d;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+a {
+    color: #fcaf17;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.page {
+    background-image: url("backgraund/bg-repeat.png");
+    background-repeat: repeat;
+    background-size: 256px;
+    background-color: #000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 10px;
+    width: 100%;
+}
+
+.app-body-content {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin: 1.25rem auto;
+    width: 100%;
+}
+
+.logo img {
+    height: 64px;
+    width: auto;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.login__user-form,
+.Login__thirdParty {
+    background-color: #fff;
+    border-radius: 0.125rem;
+    box-shadow: 0 0 1.25rem 0 rgba(0,0,0,.3);
+    margin: 0 auto 1.25rem auto;
+    padding: 1.25rem;
+    width: calc(100% - 1.25rem);
+}
+
+@media (min-width: 32.5em) {
+    .login__user-form,
+    .Login__thirdParty {
+        width: 31.25rem;
+        padding: 2.5rem;
+    }
+}
+
+h1 {
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    color: #4d4d4d;
+    font-weight: 600;
+    margin-bottom: 0.625rem;
+    margin-top: 0;
+}
+
+ {
+    border: none;
+    margin: 0 0 1.25rem;
+    padding: 0;
+}
+
+.fieldset__input {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.text-input {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    color: #666;
+    display: block;
+    font-size: 1.125rem;
+    height: 3.125rem;
+    margin: 0;
+    padding: 0 1.25rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.text-input:focus {
+    border-color: #aaa;
+}
+
+.text-input:focus,
+.text-input:not(:placeholder-shown) {
+    padding-top: 0.75rem;
+}
+
+.text-input__label {
+    color: #4d4d4d;
+    display: block;
+    font-size: 1rem;
+    left: 1.25rem;
+    line-height: 3.125rem;
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: transform 0.2s cubic-bezier(.4,0,.6,1), color 0.2s;
+    white-space: nowrap;
+}
+
+.text-input:not(:placeholder-shown) + .text-input__label {
+    color: #666;
+    transform: translate(0.0625rem, -0.3125rem) scale(0.75);
+}
+
+.fieldset-password__password-input-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.fieldset-password__password-input-container .text-input {
+    padding-right: 3.25rem;
+}
+
+.password-input__password-buttom {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 1rem;
+    padding: 0;
+    position: absolute;
+    right: 1.25rem;
+    top: 1.125rem;
+    width: 2rem;
+}
+
+.password-buttom__icon {
+    fill: #999;
+    height: 16px;
+    width: 16px;
+    vertical-align: unset;
+}
+
+.loginform__keep-Me-Signe-dIn-container {
+    align-items: center;
+    display: flex;
+    margin-top: 1.25rem;
+}
+
+.UI__CheckBox-socialclub__wrapper {
+    position: relative;
+    display: block;
+    line-height: 20px;
+    color: #000;
+}
+
+.UI__CheckBox-socialclub__wrapper input[type=checkbox] {
+    height: 1.25rem;
+    opacity: 0;
+    position: absolute;
+    width: 1.25rem;
+}
+
+.UI__CheckBox-socialclub__wrapper label {
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1.25rem;
+    min-height: 20px;
+    padding-left: 1.875rem;
+    position: relative;
+}
+
+.UI__CheckBox-socialclub__wrapper label:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    background: #fff;
+    border: 1px solid hsla(0,0%,30%,.3);
+    border-radius: 3px;
+    height: 1.25rem;
+    width: 1.25rem;
+    left: 0;
+    top: 0;
+}
+
+.UI__CheckBox-socialclub__wrapper label:after {
+    content: none;
+    display: inline-block;
+    position: absolute;
+    border-bottom: 2px solid #333;
+    border-left: 2px solid #333;
+    height: 0.375rem;
+    width: 0.75rem;
+    transform: rotate(-50deg);
+    left: 0.25rem;
+    top: 0.375rem;
+}
+
+.UI__CheckBox-socialclub__wrapper input[type=checkbox]:checked + label:after {
+    content: "";
+}
+
+.UI__CheckBox-socialclub__wrapper input[type=checkbox]:focus + label:before {
+    border-color: #fcaf17;
+    border-width: 1px;
+}
+
+.loginform__submit-field {
+    border: 0;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.loginform__submit-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loginform__submit-action p {
+    align-self: center;
+    margin: 0;
+}
+
+.loginform__forgotPassword__P5Rqh {
+    color: #1a1a1a;
+    text-decoration: underline;
+    font-size: 0.95rem;
+}
+
+
+.loginform__submit__rf6YG {
+    background: #fcaf17;
+    border-color: #fcaf17;
+    color: #000;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 2.25rem;
+    min-width: 6.25rem;
+    padding: 0 1.25rem;
+    text-align: center;
+    flex-shrink: 0;
+    margin-left: 0.625rem;
+    transition: background 0.2s;
+}
+
+.loginform__submit__rf6YG:hover {
+    background: #f7931e;
+}
+
+.UI__ThirdPartyAuth__wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.UI__ThirdPartyAuth__label {
+    color: #4d4d4d;
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.UI__ThirdPartyAuth__services {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ThirdPartyAuthProvider__link__MzR1g {
+    display: inline-block;
+    margin-left: 10px;
+    max-height: 65px;
+    max-width: 65px;
+    position: relative;
+    transition: opacity 0.2s;
+}
+
+.ThirdPartyAuthProvider__link__MzR1g:hover {
+    opacity: 0.8;
+}
+
+.ThirdPartyIcon__icon__pOdjC {
+    min-height: 44px;
+    min-width: 44px;
+    max-height: 65px;
+    max-width: 65px;
+}
+
+.login-create-link {
+    color: #fff;
+    margin: 1.25rem auto;
+    text-align: center;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.Login__loginStatusNavLink__lq_aC {
+    color: #fcaf17;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+footer {
+    grid-area: footer;
+    margin: 1.25rem 0;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 1.25rem;
+}
+
+.AppBody__infoList__EZ3F9 {
+    list-style: none;
+    margin: 0;
+    padding: 0 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.AppBody__info__TxE07 {
+    color: #999;
+    display: inline-block;
+    font-size: 0.75rem;
+    line-height: 1.375rem;
+    text-shadow: 0 0.0625rem 0 rgba(0,0,0,.8);
+    text-transform: uppercase;
+}
+
+.AppBody__info__TxE07:not(:first-child) {
+    border-left: 1px solid #999;
+    margin-left: 0.3125rem;
+    padding-left: 0.3125rem;
+}
+
+.AppBody__footerPolicyButton__WIWmO {
+    appearance: none;
+    background: none;
+    border: none;
+    color: hsla(0,0%,100%,.8);
+    cursor: pointer;
+    padding: 0;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    transition: color 0.2s ease-out;
+}
+
+.AppBody__footerPolicyButton__WIWmO:hover {
+    color: #fff;
+    text-decoration: underline;
+}

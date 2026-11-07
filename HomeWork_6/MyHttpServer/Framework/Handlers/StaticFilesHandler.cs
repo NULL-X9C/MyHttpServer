@@ -47,11 +47,14 @@ public class StaticFilesHandler(string staticFolder, MimeTypeResolver mimeTypeRe
             string ext = Path.GetExtension(filePath);
             string mime = mimeTypeResolver.GetType(ext);
             response.ContentType = mime;
+            
             if (File.Exists(filePath))
             {
                 await SendResponseAsync(filePath, response);
-                response.Close();
+                
             }
+
+            response.Close();
         }
         catch (Exception e)
         {

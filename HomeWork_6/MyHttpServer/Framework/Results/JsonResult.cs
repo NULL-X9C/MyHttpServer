@@ -9,7 +9,6 @@ public class JsonResult(object data) : IActionResult
 
     public byte[] ExecuteResult()
     {
-        // Автоматически превращаем объект в JSON-строку
         string json = JsonSerializer.Serialize(data);
         return Encoding.UTF8.GetBytes(json);
     }

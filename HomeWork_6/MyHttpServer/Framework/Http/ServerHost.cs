@@ -6,7 +6,8 @@ public class ServerHost(HttpServer server)
     {
         Console.WriteLine("Запуск");
         var cts = new CancellationTokenSource();
-        var serverTask = Task.Run(() => server.StartAsync(cts.Token));
+        CancellationToken ct = cts.Token;
+        var serverTask = Task.Run(() => server.StartAsync(cts.Token), ct);
 
         Console.WriteLine("Сервер поднят введите exit для остановки ");
         while (true)
@@ -15,7 +16,7 @@ public class ServerHost(HttpServer server)
             if (command?.Trim().ToLower() == "exit")
             {
                 Console.WriteLine("Начат процесс остановки сервера ");
-               cts.Cancel();
+               await cts.CancelAsync();
                break;
             }
             else
