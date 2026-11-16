@@ -1,16 +1,17 @@
 # ORIS homeworks
+
 посмотреть веб страницы можно по ссылке: http://null-x9c.github.io/TireShop
-# ЧТОБЫ ОТКРЫТЬ КОНТРОЛЬНУЮ РАБОТУ НУЖНО ОТКРЫТЬ ФАЙЛ папка-куда-клонили\ControlWork\MyHttpServer\MyHttpServer.csproj
 
-работа с контрольной по адресу http://127.0.0.1:1488/{route}
+- HomeWork_1 - Верстка сайта: «Страница поиска»
 
-1.	GET /movies — вывести фильмы с фильтрацией по жанру 	.
-2.	GET /movies/details?id=1 — получить информацию о фильме.
-3.	POST /movies/create — добавить фильм с полями title и genre.
-4.	PUT /movies/update?id=1 — изменить название, жанр и статус просмотра
+- HomeWork_2 - HttpListener. HTTP-сервер на C#, Вёрстка knowledge
 
-пример запроса для PUT:
-fetch('/movies/update?id=1&title=Matrix&genre=action&status=watched',
-{ 
-    method: 'PUT' 
-});
+- HomeWork_3 — HttpListener. (Статические файлы, передача типов файлов)
+
+- HomeWork_4 — HttpListener.(Передача параметров из query в метод endpoint, обработка ошибок) Вёрстка: rockstar
+
+- HomeWork_5 — HttpListener. (Отправка сообщения на почту(так как многие электронные почты блокируют архивы, в моем случае отправка ссылки на диск с zip архивом проекта)) + ddos контроллера 
+
+- HomeWork_6 — HttpListener. (Библиотека HtmlTemplater)
+- HomeWork_7 — HttpListener(unit тесты) + интеграционные тесты сервера
+- HomeWork_8 — HttpListener.(Библиотека ORM с защитой от sql инъекцией поддержка crud операций )
