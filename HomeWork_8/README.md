@@ -1,2 +1,1 @@
-# ORIS homeworks
-посмотреть веб страницы можно по ссылке: http://null-x9c.github.io/TireShop
+HomeWork_8 — HttpListener.(Библиотека ORM с защитой от sql инъекцией поддержка crud операций )
