@@ -87,6 +87,13 @@ public class ControllersHandler : BaseHandler
 
             var result = endpoint.EndpointAction.Invoke(controllerInstance, invokeArgs);
 
+            if (result is Task task)
+            {
+                 await task;
+                 var resultProperty = task.GetType().GetProperty("Result");
+                 result = resultProperty.GetValue(task);
+            }
+
             if (response.StatusCode == 204 || response.StatusCode == 303)
             {
                 response.Close();

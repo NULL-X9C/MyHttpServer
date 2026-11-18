@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MiniHttpServer.ORM\MiniHttpServer.ORM.csproj" />
+      <ProjectReference Include="..\MyHttpServer.ORM\MyHttpServer.ORM.csproj" />
       <ProjectReference Include="..\MiniTemplateEngine\MiniTemplateEngine.csproj" />
       <ProjectReference Include="..\MyHttpServer\MyHttpServer.csproj" />
     </ItemGroup>

@@ -1,6 +1,7 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using MyHttpServer.Framework.Configuration.Email;
 
 namespace MyHttpServer.Framework.Services;
 

@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniTemplateEngine", "MiniT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpServer.Test", "HttpServer.Test\HttpServer.Test.csproj", "{D0DB73B4-50CC-469F-B0DB-3FB7C27FB392}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniHttpServer.ORM", "MiniHttpServer.ORM\MiniHttpServer.ORM.csproj", "{F84D4A63-30BE-4187-9B70-F2A6C8E0DF1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHttpServer.ORM", "MyHttpServer.ORM\MyHttpServer.ORM.csproj", "{F84D4A63-30BE-4187-9B70-F2A6C8E0DF1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

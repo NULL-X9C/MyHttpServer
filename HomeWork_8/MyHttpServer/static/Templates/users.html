@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление пользователями (ORM)</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 30px auto; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<h1>Список пользователей из PostgreSQL</h1>
+
+$if(HasUsers)
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+    </tr>
+    </thead>
+    <tbody>
+    $foreach(var u in Users)
+    <tr>
+        <td>${u.Id}</td>
+        <td>${u.Name}</td>
+        <td>${u.Email}</td>
+        <td>${u.Age}</td>
+    </tr>
+    $endfor
+    </tbody>
+</table>
+$else
+<p>В таблице Users пока нет записей.</p>
+$endif
+
+<h2>Добавить пользователя (InsertAsync)</h2>
+<form method="POST" action="/users/create">
+    Имя: <input type="text" name="name" required />
+    Email: <input type="email" name="email" required />
+    Возраст: <input type="number" name="age" required />
+    <button type="submit">Добавить</button>
+</form>
+
+<h2>Обновить пользователя по Id (UpdateAsync)</h2>
+<form method="POST" action="/users/update">
+    Id: <input type="number" name="id" required style="width: 60px;" />
+    Новое имя: <input type="text" name="name" required />
+    Новый Email: <input type="email" name="email" required />
+    Новый возраст: <input type="number" name="age" required style="width: 70px;" />
+    <button type="submit">Обновить</button>
+</form>
+
+<h2>Удалить пользователя по Id (DeleteAsync)</h2>
+<form method="POST" action="/users/delete">
+    Id: <input type="number" name="id" required style="width: 60px;" />
+    <button type="submit">Удалить</button>
+</form>
+</body>
+</html>
