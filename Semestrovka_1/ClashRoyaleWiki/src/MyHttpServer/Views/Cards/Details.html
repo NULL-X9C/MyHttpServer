@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${Card.Name} — характеристики и формы карты | Clash Royale Wordle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<script src="/js/details-validation.js" defer></script>
+<body class="page" id="top">
+
+<main class="page__main">
+    <div class="royale-board royale-board--details">
+
+        <div class="board-header__top-nav">
+            <div class="board-header__nav-group">
+                <a class="btn btn--gold" href="/cards">На главную</a>
+                <a class="btn btn--outline" href="/cards">← Назад к списку карт</a>
+            </div>
+            $if(IsAdmin)
+            <a class="btn btn--gold" href="/admin/cards/edit?id=${Card.Id}">Редактировать карту</a>
+            $endif
+        </div>
+
+        $if(HasError)
+        <div class="alert alert--error">${ErrorMessage}</div>
+        $endif
+
+        <header class="board-header board-header--details">
+            <h1 class="board-header__title">${Card.Name}</h1>
+            <p class="board-header__subtitle">Обзор ${Card.Name}</p>
+        </header>
+
+        <section class="card-detail__hero">
+            <div class="card-detail__frame">
+                <img class="card-detail__image" src="${Card.IconUrl}" alt="${Card.Name}">
+            </div>
+
+            <div>
+                <h2 class="card-detail__stats-title">Характеристики карты</h2>
+                <div class="stats-grid">
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Стоимость эликсира</span>
+                        <span class="stats-grid__value">${Card.ElixirCost}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Редкость</span>
+                        <span class="stats-grid__value">${Card.Rarity}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Тип</span>
+                        <span class="stats-grid__value">${Card.Type}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Цели</span>
+                        <span class="stats-grid__value">${Stats.Targets}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Дальность</span>
+                        <span class="stats-grid__value">${Stats.RangeType}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Скорость атаки</span>
+                        <span class="stats-grid__value">${Stats.HitSpeed}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Скорость</span>
+                        <span class="stats-grid__value">${Stats.MovementSpeed}</span>
+                    </div>
+                    <div class="stats-grid__item">
+                        <span class="stats-grid__label">Дата выхода</span>
+                        <span class="stats-grid__value">${Card.ReleaseYear}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        $if(HasForms)
+        <section class="forms-showcase" id="card-forms-section">
+            <div class="forms-showcase__header">
+                <span class="forms-showcase__eyebrow">Формы карты и особые варианты</span>
+                <h2 class="forms-showcase__title">${Card.Name}</h2>
+                <p class="forms-showcase__subtitle">
+                    Изучите базовую версию и особые формы карты ${Card.Name}: параметры, стоимость активации и описание способностей.
+                </p>
+            </div>
+
+            <div class="forms-showcase__tabs" role="tablist">
+                <button type="button"
+                        class="forms-showcase__tab forms-showcase__tab--active js-form-tab-btn"
+                        data-target="form-panel-base">
+                    ○ Базовая
+                </button>
+                $foreach(var form in Forms)
+                <button type="button"
+                        class="forms-showcase__tab forms-showcase__tab--${form.FormTypeClass} js-form-tab-btn"
+                        data-target="form-panel-${form.Id}">
+                    $if(form.IsHero)
+                    👑 Герой
+                    $else
+                    ✦ Эволюция
+                    $endif
+                </button>
+                $endfor
+            </div>
+
+            <div class="forms-showcase__panels">
+
+                <article class="forms-showcase__panel js-form-panel" id="form-panel-base">
+                    <div class="forms-showcase__art">
+                        <img class="forms-showcase__image" src="${Card.IconUrl}" alt="${Card.Name}">
+                    </div>
+                    <div class="forms-showcase__content">
+                        <div class="forms-showcase__title-row">
+                            <h3 class="forms-showcase__card-title">${Card.Name}</h3>
+                            <span class="rarity-badge rarity-badge--${Card.RarityClass}">${Card.Rarity}</span>
+                            <span class="forms-showcase__tag">Базовая форма</span>
+                        </div>
+
+                        <div class="forms-showcase__metrics">
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Стоимость и тип</span>
+                                <span class="forms-showcase__metric-value">${Card.ElixirCost} Elixir • ${Card.Type}</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Цели и дальность</span>
+                                <span class="forms-showcase__metric-value">${Stats.Targets} • ${Stats.RangeType}</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Скорость атаки</span>
+                                <span class="forms-showcase__metric-value">${Stats.HitSpeed}</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Скорость и релиз</span>
+                                <span class="forms-showcase__metric-value">${Stats.MovementSpeed} • ${Card.ReleaseYear}</span>
+                            </div>
+                        </div>
+
+                        <p class="forms-showcase__desc">${Card.Description}</p>
+                    </div>
+                </article>
+
+                $foreach(var form in Forms)
+                <article class="forms-showcase__panel forms-showcase__panel--${form.FormTypeClass} js-form-panel"
+                         id="form-panel-${form.Id}">
+                    <div class="forms-showcase__art forms-showcase__art--${form.FormTypeClass}">
+                        <img class="forms-showcase__image" src="${form.FormIconUrl}" alt="${form.Title}">
+                    </div>
+                    <div class="forms-showcase__content">
+                        <div class="forms-showcase__title-row">
+                            <h3 class="forms-showcase__card-title">${form.Title}</h3>
+                            <span class="forms-showcase__tag forms-showcase__tag--${form.FormTypeClass}">
+                                    ${form.FormType}
+                                </span>
+                        </div>
+
+                        <div class="forms-showcase__metrics">
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Тип особой формы</span>
+                                <span class="forms-showcase__metric-value">${form.FormType} (${Card.Type})</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">${form.CostLabel}</span>
+                                <span class="forms-showcase__metric-value">${form.CyclesOrCost}</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Базовая стоимость и цели</span>
+                                <span class="forms-showcase__metric-value">${Card.ElixirCost} Elixir • ${Stats.Targets}</span>
+                            </div>
+                            <div class="forms-showcase__metric">
+                                <span class="forms-showcase__metric-label">Атака и скорость базы</span>
+                                <span class="forms-showcase__metric-value">${Stats.HitSpeed} • ${Stats.MovementSpeed}</span>
+                            </div>
+                        </div>
+
+                        <p class="forms-showcase__desc">${form.AbilityDescription}</p>
+                    </div>
+                </article>
+                $endfor
+
+            </div>
+        </section>
+        $endif
+
+        <section class="detail-section">
+            <h2 class="detail-section__title">Описание</h2>
+            <div class="detail-section__box">
+                ${Card.Description}
+            </div>
+        </section>
+
+        $if(HasCustomStrategy)
+        <section class="detail-section">
+            <h2 class="detail-section__title">Экспертный разбор</h2>
+            <div class="detail-section__box">
+                ${Stats.CustomStrategyHtml}
+            </div>
+        </section>
+        $endif
+
+        <section class="detail-section">
+            <h2 class="detail-section__title">Боевая стратегия ${Card.Name}</h2>
+            <p class="detail-section__lead">
+                За ${Card.ElixirCost} эликсира ${Card.Name} играет как ${Card.Rarity} (${Card.Type}), нацеливаясь на ${Stats.Targets}. Выпущена в ${Card.ReleaseYear} году и остаётся надёжным выбором для баланса атаки и обороны.
+            </p>
+
+            <div class="strategy-grid">
+                <article class="strategy-card">
+                    <h3 class="strategy-card__title">Начальные ходы и темп</h3>
+                    <p class="strategy-card__text">
+                        Начинайте с ${Card.Name}, когда можете накопить ${Card.ElixirCost} эликсира. Это позволяет проверить реакции противника без полного наступления.
+                    </p>
+                </article>
+
+                <article class="strategy-card">
+                    <h3 class="strategy-card__title">Комбинации поддержки</h3>
+                    <p class="strategy-card__text">
+                        Сочетайте ${Card.Name} с заклинаниями или войсками поддержки, которые усиливают давление (${Card.Type}) с учётом дальности ${Stats.RangeType}.
+                    </p>
+                </article>
+
+                <article class="strategy-card">
+                    <h3 class="strategy-card__title">Оборонительный переворот</h3>
+                    <p class="strategy-card__text">
+                        Используйте скорость атаки ${Stats.HitSpeed} и цели (${Stats.Targets}) в обороне, после чего переходите в контратаку.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="detail-section">
+            <h2 class="detail-section__title">Синергии и игра вокруг контрмер</h2>
+            <div class="strategy-grid strategy-grid--two-cols">
+                <article class="strategy-card">
+                    <h3 class="strategy-card__title">Синергии и идеи колод</h3>
+                    <p class="strategy-card__text">
+                        Дешёвые циклические карты помогают быстрее возвращаться к ${Card.Name} в ротации и регулярно активировать особые формы.
+                    </p>
+                </article>
+
+                <article class="strategy-card">
+                    <h3 class="strategy-card__title">Безопасность против заклинаний</h3>
+                    <p class="strategy-card__text">
+                        Распределяйте юнитов поддержки вокруг ${Card.Name}, чтобы не отдавать сопернику выгодный размен тяжёлыми заклинаниями.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        $if(IsAdmin)
+        <section class="detail-section">
+            <h2 class="detail-section__title">Добавить форму (Evolution / Hero) для ${Card.Name}</h2>
+
+            <form id="add-card-form" class="filter-panel" action="/admin/forms/add" method="POST">
+                <input type="hidden" name="CardId" value="${Card.Id}">
+                <input type="hidden" name="CardSlug" value="${Card.Slug}">
+
+                <div class="filter-panel__controls filter-panel__controls--three">
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="form-type-select">Тип формы</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="form-type-select" name="FormType">
+                                <option value="1">Evolution</option>
+                                <option value="2">Hero</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="form-title-input">Название формы</label>
+                        <input class="filter-panel__input"
+                               id="form-title-input"
+                               name="Title"
+                               type="text"
+                               required
+                               placeholder="Напр.: Hero ${Card.Name}">
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="cycles-input">Циклы / Эликсир</label>
+                        <input class="filter-panel__input"
+                               id="cycles-input"
+                               name="CyclesOrCost"
+                               type="number"
+                               min="1"
+                               max="10"
+                               value="2"
+                               required>
+                    </div>
+                </div>
+
+                <div class="filter-panel__field filter-panel__field--spaced">
+                    <label class="filter-panel__label" for="form-icon-input">Путь к картинке формы</label>
+                    <input class="filter-panel__input"
+                           id="form-icon-input"
+                           name="FormIconUrl"
+                           type="text"
+                           value="${Card.IconUrl}"
+                           required>
+                </div>
+
+                <div class="filter-panel__field filter-panel__field--spaced">
+                    <div class="filter-panel__label-row">
+                        <label class="filter-panel__label" for="ability-desc-input">Описание способности</label>
+                        <span id="char-counter" class="filter-panel__counter">0 / 300</span>
+                    </div>
+                    <textarea class="filter-panel__textarea"
+                              id="ability-desc-input"
+                              name="AbilityDescription"
+                              rows="3"
+                              maxlength="300"
+                              required
+                              placeholder="Опишите механику эволюции или способности героя..."></textarea>
+                </div>
+
+                <div class="filter-panel__footer-actions">
+                    <button type="submit" class="btn btn--gold">Сохранить форму</button>
+                </div>
+            </form>
+        </section>
+        $endif
+
+        <div class="detail-section__footer">
+            <a class="btn btn--purple" href="/cards">← Назад к списку карт</a>
+        </div>
+
+    </div>
+</main>
+
+<nav class="mobile-nav" aria-label="Мобильная навигация">
+    <div class="mobile-nav__inner">
+        <a class="mobile-nav__item" href="/cards">
+            <svg class="mobile-nav__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <span>Главная</span>
+        </a>
+        <a class="mobile-nav__item mobile-nav__item--active" href="/cards">
+            <svg class="mobile-nav__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m16 6 4 14"></path>
+                <path d="M12 6v14"></path>
+                <path d="M8 8v12"></path>
+                <path d="M4 4v16"></path>
+            </svg>
+            <span>Карты</span>
+        </a>
+        $if(IsAdmin)
+        <a class="mobile-nav__item" href="/admin">
+            <span>Админ</span>
+        </a>
+        $else
+        <a class="mobile-nav__item" href="/login">
+            <span>Вход</span>
+        </a>
+        $endif
+    </div>
+</nav>
+
+<footer class="site-footer">
+    <div class="site-footer__container">
+        <div>
+            <p>Copyright 2026 Clash Royale Wordle Wiki. Семестровая работа ОРИС.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

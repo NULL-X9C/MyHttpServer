@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${PageTitle} | Админ-панель</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page" id="top">
+
+<main class="page__main">
+    <div class="royale-board royale-board--details">
+
+        <div class="board-header__top-nav">
+            <a class="btn btn--outline" href="/admin">← Назад в админку</a>
+            $if(IsEdit)
+            <a class="btn btn--gold" href="/cards/details?slug=${Card.Slug}">Открыть на сайте</a>
+            $endif
+        </div>
+
+        <header class="board-header board-header--details">
+            <h1 class="board-header__title">${PageTitle}</h1>
+            <p class="board-header__subtitle">
+                Заполните базовые параметры карты, характеристики Wordle и экспертную стратегию.
+            </p>
+        </header>
+
+        $if(HasError)
+        <div class="alert alert--error" id="server-error-box">${ErrorMessage}</div>
+        $endif
+
+        <div class="alert alert--error alert--hidden" id="client-error-box"></div>
+
+        <form class="edit-form" id="save-card-form" action="/admin/cards/save" method="POST" novalidate>
+            <input type="hidden" name="Id" value="${Card.Id}">
+            <input type="hidden" id="image-base64-input" name="ImageBase64" value="">
+            <input type="hidden" id="image-ext-input" name="ImageExt" value="">
+
+            <section class="edit-form__section">
+                <h2 class="edit-form__section-title">Основные данные карты</h2>
+
+                <div class="edit-form__grid">
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-name">Название карты</label>
+                        <input class="filter-panel__input"
+                               id="card-name"
+                               name="Name"
+                               type="text"
+                               value="${Card.Name}"
+                               required
+                               placeholder="Напр.: Валькирия">
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-slug">URL Slug (латиница и дефис)</label>
+                        <input class="filter-panel__input"
+                               id="card-slug"
+                               name="Slug"
+                               type="text"
+                               value="${Card.Slug}"
+                               required
+                               placeholder="valkyrie">
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-rarity">Редкость</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select js-enum-select"
+                                    id="card-rarity"
+                                    name="Rarity"
+                                    data-selected="${SelectedRarity}">
+                                <option value="1">Common</option>
+                                <option value="2">Rare</option>
+                                <option value="3">Epic</option>
+                                <option value="4">Legendary</option>
+                                <option value="5">Champion</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-type">Тип карты</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select js-enum-select"
+                                    id="card-type"
+                                    name="Type"
+                                    data-selected="${SelectedType}">
+                                <option value="1">Troop</option>
+                                <option value="2">Building</option>
+                                <option value="3">Spell</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-elixir">Стоимость эликсира (1–10)</label>
+                        <input class="filter-panel__input"
+                               id="card-elixir"
+                               name="ElixirCost"
+                               type="number"
+                               min="1"
+                               max="10"
+                               value="${Card.ElixirCost}"
+                               required>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="card-year">Год выхода</label>
+                        <input class="filter-panel__input"
+                               id="card-year"
+                               name="ReleaseYear"
+                               type="number"
+                               min="2016"
+                               max="2030"
+                               value="${Card.ReleaseYear}"
+                               required>
+                    </div>
+                </div>
+
+                <div class="image-uploader">
+                    <div class="image-uploader__preview">
+                        <img class="image-uploader__img"
+                             id="card-image-preview"
+                             src="${Card.IconUrl}"
+                             alt="Предпросмотр карты">
+                    </div>
+                    <div class="image-uploader__controls">
+                        <div class="filter-panel__field">
+                            <label class="filter-panel__label" for="card-icon-url">Путь к картинке (или загрузите файл ниже)</label>
+                            <input class="filter-panel__input"
+                                   id="card-icon-url"
+                                   name="IconUrl"
+                                   type="text"
+                                   value="${Card.IconUrl}"
+                                   placeholder="/images/cards/valkyrie.png">
+                        </div>
+
+                        <div class="filter-panel__field">
+                            <label class="filter-panel__label" for="card-image-file">Загрузить с ПК (.png, .webp, .jpg — до 5 МБ)</label>
+                            <input class="filter-panel__input filter-panel__input--file"
+                                   id="card-image-file"
+                                   type="file"
+                                   accept=".png,.webp,.jpg,.jpeg,image/png,image/webp,image/jpeg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-panel__field filter-panel__field--spaced">
+                    <label class="filter-panel__label" for="card-description">Описание карты</label>
+                    <textarea class="filter-panel__textarea"
+                              id="card-description"
+                              name="Description"
+                              rows="3"
+                              required
+                              placeholder="Краткое описание карты из игры...">${Card.Description}</textarea>
+                </div>
+            </section>
+
+            <section class="edit-form__section">
+                <h2 class="edit-form__section-title">Боевые характеристики (Wordle)</h2>
+
+                <div class="edit-form__grid">
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="stat-targets">Цели</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select js-enum-select"
+                                    id="stat-targets"
+                                    name="Targets"
+                                    data-selected="${SelectedTargets}">
+                                <option value="1">Ground</option>
+                                <option value="2">Air</option>
+                                <option value="3">AirAndGround</option>
+                                <option value="4">Buildings</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="stat-range">Дальность</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select js-enum-select"
+                                    id="stat-range"
+                                    name="RangeType"
+                                    data-selected="${SelectedRangeType}">
+                                <option value="1">Melee</option>
+                                <option value="2">Ranged</option>
+                                <option value="3">Mixed</option>
+                                <option value="4">None</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="stat-hit-speed">Скорость атаки</label>
+                        <input class="filter-panel__input"
+                               id="stat-hit-speed"
+                               name="HitSpeed"
+                               type="text"
+                               value="${Stats.HitSpeed}"
+                               required
+                               placeholder="1.2s или -">
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="stat-speed">Скорость передвижения</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select js-enum-select"
+                                    id="stat-speed"
+                                    name="MovementSpeed"
+                                    data-selected="${SelectedMovementSpeed}">
+                                <option value="1">Immobile</option>
+                                <option value="2">Slow</option>
+                                <option value="3">Medium</option>
+                                <option value="4">Fast</option>
+                                <option value="5">VeryFast</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WYSIWYG-редактор Quill.js -->
+                <div class="filter-panel__field filter-panel__field--spaced">
+                    <label class="filter-panel__label" for="strategy-editor">Экспертная стратегия (WYSIWYG — Quill.js)</label>
+                    <div class="wysiwyg-wrap">
+                        <div id="strategy-editor">${Stats.CustomStrategyHtml}</div>
+                    </div>
+                    <textarea id="strategy-html-input" name="CustomStrategyHtml" hidden>${Stats.CustomStrategyHtml}</textarea>
+                </div>
+            </section>
+
+            <div class="edit-form__actions">
+                <a class="btn btn--outline" href="/admin">Отмена</a>
+                <button type="submit" class="btn btn--gold">Сохранить карту</button>
+            </div>
+        </form>
+
+        $if(IsEdit)
+        <section class="edit-form__section edit-form__section--spaced">
+            <div class="filter-panel__header">
+                <h2 class="edit-form__section-title">Особые формы карты (Evolution / Hero)</h2>
+                <a class="btn btn--purple btn--sm" href="/cards/details?slug=${Card.Slug}#add-card-form">
+                    + Добавить форму на странице карты
+                </a>
+            </div>
+
+            $if(HasForms)
+            <div class="forms-manage-list">
+                $foreach(var form in Forms)
+                <div class="forms-manage-item">
+                    <div class="forms-manage-item__left">
+                        <img class="forms-manage-item__thumb" src="${form.FormIconUrl}" alt="${form.Title}">
+                        <div>
+                            <div class="forms-manage-item__title-row">
+                                <span class="forms-showcase__tag forms-showcase__tag--${form.FormTypeClass}">${form.FormType}</span>
+                                <strong>${form.Title}</strong>
+                                <span class="forms-manage-item__cost">${form.CostLabel}: ${form.CyclesOrCost}</span>
+                            </div>
+                            <p class="forms-manage-item__desc">${form.AbilityDescription}</p>
+                        </div>
+                    </div>
+
+                    <form action="/admin/forms/delete" method="POST" class="js-delete-form">
+                        <input type="hidden" name="id" value="${form.Id}">
+                        <input type="hidden" name="cardId" value="${Card.Id}">
+                        <button type="submit" class="btn btn--danger btn--sm">Удалить</button>
+                    </form>
+                </div>
+                $endfor
+            </div>
+            $else
+            <p class="info-card__text">У этой карты пока нет особых форм (эволюций или героев).</p>
+            $endif
+        </section>
+        $endif
+
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script src="/js/admin-auth.js" defer></script>
+</body>
+</html>

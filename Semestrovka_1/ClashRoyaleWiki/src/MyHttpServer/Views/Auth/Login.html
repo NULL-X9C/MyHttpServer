@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для администратора | Clash Royale Wordle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page">
+
+<main class="page__main page__main--centered">
+    <div class="royale-board royale-board--narrow royale-board--details">
+
+        <div class="board-header__top-nav">
+            <a class="btn btn--outline" href="/cards">← Назад в каталог</a>
+        </div>
+
+        <header class="board-header">
+            <h1 class="board-header__title">Вход в админку</h1>
+            <p class="board-header__subtitle">
+                Авторизуйтесь для управления библиотекой карт, характеристиками и особыми формами.
+            </p>
+        </header>
+
+        $if(HasError)
+        <div class="alert alert--error" id="server-error-box">${ErrorMessage}</div>
+        $endif
+
+        <div class="alert alert--error alert--hidden" id="client-error-box"></div>
+
+        <!-- HTML-Форма №2: Авторизация (Regex №1 для Email на клиенте и сервере) -->
+        <form class="auth-form" id="login-form" action="/login" method="POST" novalidate>
+            <div class="filter-panel__field">
+                <label class="filter-panel__label" for="login-email">Email</label>
+                <input class="filter-panel__input"
+                       id="login-email"
+                       name="Email"
+                       type="email"
+                       value="${Email}"
+                       autocomplete="username"
+                       required
+                       placeholder="admin@clash.ru">
+            </div>
+
+            <div class="filter-panel__field">
+                <label class="filter-panel__label" for="login-password">Пароль</label>
+                <input class="filter-panel__input"
+                       id="login-password"
+                       name="Password"
+                       type="password"
+                       autocomplete="current-password"
+                       required
+                       placeholder="Введите пароль">
+            </div>
+
+            <button type="submit" class="btn btn--gold btn--full auth-form__submit">
+                Войти
+            </button>
+        </form>
+
+    </div>
+</main>
+
+<script src="/js/admin-auth.js" defer></script>
+</body>
+</html>

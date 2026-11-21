@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека карт Clash Royale | Clash Royale Wordle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<script src="/js/catalog-ajax.js" defer></script>
+<body class="page" id="top">
+
+<main class="page__main">
+    <div class="royale-board royale-board--catalog">
+
+        <header class="board-header board-header--catalog">
+            <div class="board-header__text">
+                <h1 class="board-header__title">Библиотека карт Clash Royale</h1>
+                <p class="board-header__subtitle">
+                    Изучите весь список карт Clash Royale. Нажмите на карту, чтобы увидеть локализованные характеристики, формы героев, эволюции и ключевые особенности в аренах.
+                </p>
+            </div>
+
+            <div class="board-header__actions">
+                <a class="btn btn--gold" href="/cards">
+                    <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9.5 20v-6h5v6"></path>
+                    </svg>
+                    На главную
+                </a>
+                $if(IsAdmin)
+                <a class="btn btn--purple" href="/admin">Админ-панель</a>
+                $else
+                <a class="btn btn--outline" href="/login">Вход</a>
+                $endif
+            </div>
+        </header>
+
+        <div class="mobile-actions">
+            <a class="btn btn--gold" href="/cards">
+                <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                На главную
+            </a>
+            <button type="button" class="btn btn--purple js-open-filters" id="mobile-filter-open-btn">
+                <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Фильтровать карты
+            </button>
+        </div>
+
+        <section class="filter-panel filter-panel--desktop" aria-label="Фильтр карт">
+            <form id="catalog-filter-form" action="/cards" method="GET">
+                <div class="filter-panel__header">
+                    <h2 class="filter-panel__title">Фильтровать карты</h2>
+                    <a href="/cards" id="reset-filters-btn" class="btn btn--outline">
+                        ✕ Очистить фильтры
+                    </a>
+                </div>
+
+                <div class="filter-panel__controls">
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="search-input">Название карты</label>
+                        <div class="filter-panel__input-wrap">
+                            <svg class="filter-panel__search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <input class="filter-panel__input filter-panel__input--with-icon"
+                                   id="search-input"
+                                   name="search"
+                                   type="text"
+                                   autocomplete="off"
+                                   placeholder="Поиск названия карты...">
+                            <div id="search-autocomplete" class="filter-panel__autocomplete"></div>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="rarity-select">Редкость</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="rarity-select" name="rarity">
+                                <option value="all">Все редкости</option>
+                                <option value="Common">Common</option>
+                                <option value="Rare">Rare</option>
+                                <option value="Epic">Epic</option>
+                                <option value="Legendary">Legendary</option>
+                                <option value="Champion">Champion</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="form-select">Форма карты</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="form-select" name="form">
+                                <option value="all">Все формы</option>
+                                <option value="hero">Есть форма героя</option>
+                                <option value="evolution">Есть эволюция</option>
+                                <option value="both">Герой + эволюция</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="elixir-select">Стоимость эликсира</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="elixir-select" name="elixir">
+                                <option value="all">Все стоимости эликсира</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <div class="filter-drawer" id="mobile-filter-drawer" aria-hidden="true">
+            <div class="filter-drawer__backdrop js-close-filters"></div>
+            <div class="filter-drawer__sheet">
+                <div class="filter-drawer__header">
+                    <h2 class="filter-drawer__title">Фильтровать карты</h2>
+                    <button type="button" class="filter-drawer__close js-close-filters" aria-label="Закрыть">
+                        ✕
+                    </button>
+                </div>
+                <form class="filter-drawer__body" id="mobile-filter-form" action="/cards" method="GET">
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="mobile-search-input">Название карты</label>
+                        <div class="filter-panel__input-wrap">
+                            <svg class="filter-panel__search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <input class="filter-panel__input filter-panel__input--with-icon"
+                                   id="mobile-search-input"
+                                   name="search"
+                                   type="text"
+                                   placeholder="Поиск названия карты...">
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="mobile-rarity-select">Редкость</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="mobile-rarity-select" name="rarity">
+                                <option value="all">Все редкости</option>
+                                <option value="Common">Common</option>
+                                <option value="Rare">Rare</option>
+                                <option value="Epic">Epic</option>
+                                <option value="Legendary">Legendary</option>
+                                <option value="Champion">Champion</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="mobile-form-select">Форма карты</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="mobile-form-select" name="form">
+                                <option value="all">Все формы</option>
+                                <option value="hero">Есть форма героя</option>
+                                <option value="evolution">Есть эволюция</option>
+                                <option value="both">Герой + эволюция</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel__field">
+                        <label class="filter-panel__label" for="mobile-elixir-select">Стоимость эликсира</label>
+                        <div class="filter-panel__select-wrap">
+                            <select class="filter-panel__select" id="mobile-elixir-select" name="elixir">
+                                <option value="all">Все стоимости эликсира</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                            <svg class="filter-panel__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn--gold btn--full">Применить</button>
+                </form>
+                <div class="filter-drawer__footer">
+                    <a href="/cards" class="btn btn--outline btn--full">✕ Очистить фильтры</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="cards-grid" id="cards-grid">
+            $foreach(var card in Cards)
+            <a class="card-item" href="/cards/details?slug=${card.Slug}">
+                <div class="card-item__inner">
+                    <div class="card-item__face card-item__face--front">
+                        <div class="card-item__image-wrap">
+                            <img class="card-item__image" src="${card.IconUrl}" alt="${card.Name}" loading="lazy">
+                        </div>
+                        <div class="card-item__info">
+                            <h3 class="card-item__name">${card.Name}</h3>
+
+                            $if(card.HasSpecialForms)
+                            <div class="card-item__forms">
+                                $if(card.HasHero)
+                                <span class="form-pill form-pill--hero" title="Hero">
+                                        <span class="form-pill__thumb">
+                                            <img class="form-pill__icon" src="${card.HeroIconUrl}" alt="" aria-hidden="true" loading="lazy">
+                                        </span>
+                                        Hero
+                                    </span>
+                                $endif
+                                $if(card.HasEvolution)
+                                <span class="form-pill form-pill--evo" title="Evo">
+                                        <span class="form-pill__thumb">
+                                            <img class="form-pill__icon" src="${card.EvolutionIconUrl}" alt="" aria-hidden="true" loading="lazy">
+                                        </span>
+                                        Evo
+                                    </span>
+                                $endif
+                            </div>
+                            $endif
+
+                            <div class="card-item__meta">
+                                <span class="rarity-badge rarity-badge--${card.RarityClass}">${card.Rarity}</span>
+                                <span class="elixir-badge">${card.ElixirCost}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-item__face card-item__face--back">
+                        <svg class="card-item__back-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="card-item__back-text">Подробнее</span>
+                    </div>
+                </div>
+            </a>
+            $endfor
+        </section>
+
+        <section class="info-section">
+            <div class="info-card">
+                <h2 class="info-card__title">Почему эта библиотека карт Clash Royale важна</h2>
+                <p class="info-card__text">Мы вручную проверяем статистику и детали способностей после каждого обновления баланса, чтобы числа, на которые вы полагаетесь, оставались актуальными.</p>
+                <p class="info-card__text">Каждый профиль объединяет характеристики карты, эволюции, формы героев и боевую стратегию в одном месте.</p>
+            </div>
+
+            <div class="info-section__grid">
+                <div class="info-card">
+                    <h3 class="info-card__title">Как получить максимум от фильтров</h3>
+                    <ul class="info-list">
+                        <li class="info-list__item">
+                            <p class="info-list__heading">Поиск по названию</p>
+                            <p class="info-list__desc">Введите часть названия карты для мгновенной фильтрации каталога.</p>
+                        </li>
+                        <li class="info-list__item">
+                            <p class="info-list__heading">Редкость, формы и эликсир</p>
+                            <p class="info-list__desc">Комбинируйте фильтры редкости, стоимости эликсира и наличия Evolution / Hero.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3 class="info-card__title">Часто задаваемые вопросы</h3>
+                    <ul class="info-list">
+                        <li class="info-list__item">
+                            <p class="info-list__heading">Как устроены особые формы?</p>
+                            <p class="info-list__desc">У каждой карты с эволюцией или формой героя внутри карточки открывается отдельный блок со всеми параметрами и описанием.</p>
+                        </li>
+                        <li class="info-list__item">
+                            <p class="info-list__heading">Работает ли сайт на смартфонах?</p>
+                            <p class="info-list__desc">Да, сетка, панель фильтров и детальные страницы полностью адаптированы под мобильные экраны.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<a class="back-to-top" href="#top" aria-label="Наверх">
+    <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+    </svg>
+</a>
+
+<nav class="mobile-nav" aria-label="Мобильная навигация">
+    <div class="mobile-nav__inner">
+        <a class="mobile-nav__item" href="/cards">
+            <svg class="mobile-nav__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <span>Главная</span>
+        </a>
+        <a class="mobile-nav__item mobile-nav__item--active" href="/cards">
+            <svg class="mobile-nav__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m16 6 4 14"></path>
+                <path d="M12 6v14"></path>
+                <path d="M8 8v12"></path>
+                <path d="M4 4v16"></path>
+            </svg>
+            <span>Карты</span>
+        </a>
+        $if(IsAdmin)
+        <a class="mobile-nav__item" href="/admin">
+            <span>Админ</span>
+        </a>
+        $else
+        <a class="mobile-nav__item" href="/login">
+            <span>Вход</span>
+        </a>
+        $endif
+    </div>
+</nav>
+
+<footer class="site-footer">
+    <div class="site-footer__container">
+        <div>
+            <p>Copyright 2026 Clash Royale Wordle Wiki. Семестровая работа ОРИС.</p>
+            <nav class="site-footer__links">
+                <a href="/cards">Каталог карт</a>
+                $if(IsAdmin)
+                <a href="/admin">Админ-панель</a>
+                $else
+                <a href="/login">Вход для администратора</a>
+                $endif
+            </nav>
+        </div>
+    </div>
+    <p class="site-footer__disclaimer">Clash Royale — торговая марка Supercell. Учебный проект.</p>
+</footer>
+
+</body>
+</html>

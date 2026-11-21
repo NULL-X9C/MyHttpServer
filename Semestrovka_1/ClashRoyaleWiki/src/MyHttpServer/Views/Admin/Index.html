@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Clash Royale Wordle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page" id="top">
+
+<main class="page__main">
+    <div class="royale-board royale-board--catalog">
+
+        <header class="board-header board-header--catalog">
+            <div class="board-header__text">
+                <span class="forms-showcase__eyebrow">Панель администратора</span>
+                <h1 class="board-header__title">Управление картами</h1>
+                <p class="board-header__subtitle">
+                    Вы вошли как <strong>${AdminUsername}</strong>. Всего карт в библиотеке: <strong>${TotalCards}</strong>.
+                </p>
+            </div>
+
+            <div class="board-header__actions board-header__actions--always">
+                <a class="btn btn--gold" href="/admin/cards/create">+ Добавить карту</a>
+                <a class="btn btn--outline" href="/cards">На сайт</a>
+                <form action="/logout" method="POST">
+                    <button type="submit" class="btn btn--danger">Выйти</button>
+                </form>
+            </div>
+        </header>
+
+        $if(HasCards)
+        <section class="admin-table-wrap" aria-label="Список карт">
+            <table class="admin-table">
+                <thead class="admin-table__head">
+                <tr>
+                    <th class="admin-table__th">Карта</th>
+                    <th class="admin-table__th">Slug</th>
+                    <th class="admin-table__th">Редкость</th>
+                    <th class="admin-table__th">Тип</th>
+                    <th class="admin-table__th">Эликсир</th>
+                    <th class="admin-table__th">Год</th>
+                    <th class="admin-table__th admin-table__th--actions">Действия</th>
+                </tr>
+                </thead>
+                <tbody class="admin-table__body">
+                $foreach(var card in Cards)
+                <tr class="admin-table__row">
+                    <td class="admin-table__td">
+                        <div class="admin-table__card-cell">
+                            <img class="admin-table__thumb" src="${card.IconUrl}" alt="${card.Name}" loading="lazy">
+                            <a class="admin-table__name" href="/cards/details?slug=${card.Slug}">${card.Name}</a>
+                        </div>
+                    </td>
+                    <td class="admin-table__td admin-table__td--mono">${card.Slug}</td>
+                    <td class="admin-table__td">
+                        <span class="rarity-badge rarity-badge--${card.RarityClass}">${card.Rarity}</span>
+                    </td>
+                    <td class="admin-table__td">${card.Type}</td>
+                    <td class="admin-table__td">
+                        <span class="elixir-badge">${card.ElixirCost}</span>
+                    </td>
+                    <td class="admin-table__td">${card.ReleaseYear}</td>
+                    <td class="admin-table__td">
+                        <div class="admin-table__actions">
+                            <a class="btn btn--outline btn--sm" href="/admin/cards/edit?id=${card.Id}">Изменить</a>
+                            <form action="/admin/cards/delete" method="POST" class="js-delete-form">
+                                <input type="hidden" name="id" value="${card.Id}">
+                                <button type="submit" class="btn btn--danger btn--sm">Удалить</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                $endfor
+                </tbody>
+            </table>
+        </section>
+        $else
+        <div class="info-card">
+            <h2 class="info-card__title">Карт пока нет</h2>
+            <p class="info-card__text">Добавьте первую карту с помощью кнопки «+ Добавить карту» выше.</p>
+        </div>
+        $endif
+
+    </div>
+</main>
+
+<script src="/js/admin-auth.js" defer></script>
+</body>
+</html>

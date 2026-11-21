@@ -1,0 +1,16 @@
+**/bin/
+**/obj/
+.git/
+.github/
+.idea/
+.vs/
+*.user
+*.DotSettings.user
+*.suo
+sql/
+Tests/
+src/HttpServer.Test/
+src/ClashRoyaleWiki/
+docker-compose*.yml
+Dockerfile
+README.md

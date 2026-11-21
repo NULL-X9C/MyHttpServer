@@ -1,0 +1,10 @@
+{
+  "Server": {
+    "Host": "127.0.0.1",
+    "Port": "1488",
+    "Path": "/"
+  },
+  "Database": {
+    "ConnectionString": "Host=localhost;Port=5432;Database=clash_royale_db;Username=postgres;Password=NoMercy"
+  }
+}
