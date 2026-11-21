@@ -10,7 +10,7 @@ namespace MyHttpServer.Controllers;
 public class UserController : ControllerBase
 {
     private const string ConnectionString =
-        "Host=localhost;Port=5432;Database=oris_test;Username=postgres;Password=NoMercy";
+        "Host=localhost;Port=5432;Database=oris_test;Username=postgres;Password=password";
 
     private readonly IOrmContext _orm;
 
